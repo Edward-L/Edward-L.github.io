@@ -86,5 +86,5 @@ exclude_generator:
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: github
-  repository: git@github.com:Edward-L/Edward-L.github.com.git
+  repository: git@github.com:Edward-L/edward-l.github.com.git
   branch: master
