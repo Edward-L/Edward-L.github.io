@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Edward_L&#39;s Blog</title>
+  <title>hexo 安装&amp;配置 | Edward_L&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Edward_L's Blog">
-<meta property="og:url" content="http://edward-l.github.io/tags/terminal/index.html">
+  <meta name="description" content="MAC升级系统之后很多东西都没有了，hexo也出现了各种奇奇怪怪的问题，索性全部重新安装过了一遍，简单记录下安装搭建hexo的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo 安装&配置">
+<meta property="og:url" content="http://edward-l.github.io/2015/03/14/hexo 安装&配置/index.html">
 <meta property="og:site_name" content="Edward_L's Blog">
-<meta property="og:description">
+<meta property="og:description" content="MAC升级系统之后很多东西都没有了，hexo也出现了各种奇奇怪怪的问题，索性全部重新安装过了一遍，简单记录下安装搭建hexo的过程。">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Edward_L's Blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="hexo 安装&配置">
+<meta name="twitter:description" content="MAC升级系统之后很多东西都没有了，hexo也出现了各种奇奇怪怪的问题，索性全部重新安装过了一遍，简单记录下安装搭建hexo的过程。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -80,16 +80,14 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-安装 mamp 后怎么从terminal 中使用mysql" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-hexo 安装&amp;配置" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/08/26/安装 mamp 后怎么从terminal 中使用mysql/" class="article-date">
-  <time datetime="2014-08-26T07:30:16.000Z" itemprop="datePublished">Aug 26 2014</time>
+    <a href="/2015/03/14/hexo 安装&配置/" class="article-date">
+  <time datetime="2015-03-14T13:30:16.000Z" itemprop="datePublished">Mar 14 2015</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/tools/">tools</a>
+    <a class="article-category-link" href="/categories/za/">za</a>
   </div>
 
   </div>
@@ -99,8 +97,8 @@ ga('send', 'pageview');
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/26/安装 mamp 后怎么从terminal 中使用mysql/">安装 mamp 后怎么从terminal 中使用mysql</a>
+    <h1 class="article-title" itemprop="name">
+      hexo 安装&amp;配置
     </h1>
   
 
@@ -108,34 +106,224 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>好久没有写php了，最近突然想再写写，之前用mysql都是直接再terminal中直接敲打命令行的，现在装了mamp之后，发现不能直接在terminal中直接启动，会出现这样的提示：<br><img src="http://m2.img.srcdd.com/farm4/d/2014/0926/11/674F297847C83F59699FD50F7A4D2206_B500_900_500_24.jpeg" alt=""></p>
-<p><img src="http://m3.img.srcdd.com/farm4/d/2014/0926/11/89B69063463F0F032FCD875C3338895A_B500_900_500_23.jpeg" alt=""></p>
-        
-          <p class="article-more-link">
-            <a href="/2014/08/26/安装 mamp 后怎么从terminal 中使用mysql/#more">Read More</a>
-          </p>
-        
+        <p>MAC升级系统之后很多东西都没有了，hexo也出现了各种奇奇怪怪的问题，索性全部重新安装过了一遍，简单记录下安装搭建hexo的过程。<br><a id="more"></a></p>
+<h2 id="安装nodejs">安装nodejs</h2><pre>brew install node</pre>
+
+<h2 id="安装hexo">安装hexo</h2><pre>npm install -g hexo</pre>
+##创建blog文件夹
+创建一个blog文件夹，并在这个文件夹新建所有blog所需要的文件
+<pre>
+mkdir blog
+hexo init
+</pre>
+
+<h2 id="安装依赖包">安装依赖包</h2><pre>npm install</pre>
+
+<h2 id="本地查看">本地查看</h2><pre>
+hexo g
+hexo s
+</pre>
+
+<h2 id="部署到github">部署到github</h2><h3 id="在github创建一个和你github用户名一样的项目">在github创建一个和你github用户名一样的项目</h3><h3 id="检查添加ssh_key">检查添加ssh key</h3><p>检查SSH keys的设置</p>
+<pre>cd ~/.ssh 检查本机的ssh密钥<pre>
+如果提示：'No such file or directory' 说明你是第一次使用git,那就生成新的ssh key
+
+###生成ssh key
+<pre>
+$ ssh-keygen -t rsa -C "邮件地址@youremail.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/your_user_directory/.ssh/id_rsa):<回车就好>
+</回车就好></pre>
+
+<h3 id="添加SSH_Key到GitHub">添加SSH Key到GitHub</h3><p>登陆github，Account Settings—-&gt;SSH Public keys —-&gt; add another public keys</p>
+<pre>cat /Users/Edward_L/.ssh/id_rsa.pub</pre>
+把这个密钥添加进去就好了
+
+###测试
+<pre>$ ssh -T git@github.com</pre>
+看到'Hi cnfeat! You've successfully authenticated, but GitHub does not provide shell access.'这个就好了～
+
+### 设置用户信息
+<pre>
+$ git config --global user.name "cnfeat"//用户名
+$ git config --global user.email  "cnfeat@gmail.com"//填写自己的邮箱
+</pre>
+
+<h3 id="将独立域名与GitHub_Pages的空间绑定">将独立域名与GitHub Pages的空间绑定</h3><p>在source中新建一个名为CNAME的文本文件，里面写入你要绑定的域名，例如</p>
+<pre>
+EdwardL.xyz
+www.EdwardL.xyz
+</pre>
+
+<h3 id="高级进阶－关于_config-yml的设置">高级进阶－关于_config.yml的设置</h3><p>下面是我的blog配置</p>
+<pre>
+# Hexo Configuration
+## Docs: http://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: Edward_L's Blog
+subtitle: 活着就是为了折腾
+description:
+author: Edward_L
+email: linzhexi777@gmail.com
+language:
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://edward-l.github.io/
+root: /
+permalink: :year/:month/:day/:title/
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+permalink_defaults:
+
+# Directory
+source_dir: source
+public_dir: public
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+highlight:
+  enable: true
+  line_number: true
+  tab_replace:
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Archives
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 1
+category: 2
+tag: 2
+
+# Server
+## Hexo uses Connect as a server
+## You can customize the logger format as defined in
+## http://www.senchalabs.org/connect/logger.html
+port: 4000
+server_ip: localhost
+logger: false
+logger_format: dev
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: MMM D YYYY
+time_format: H:mm:ss
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 5
+pagination_dir: page
+
+# Disqus
+disqus_shortname: 
+
+# Extensions
+## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
+## Themes: https://github.com/hexojs/hexo/wiki/Themes
+theme: landscape-plus
+exclude_generator:
+
+# Deployment
+## Docs: http://hexo.io/docs/deployment.html
+deploy:
+  type: git
+  repository: https://github.com/Edward-L/Edward-L.github.io.git
+  branch: master 
+</pre>
+
+<p>下面是我主题的_config.yml的配置文件</p>
+<pre>
+# Header
+menu:
+  Home: /
+  Archives: /archives
+  #rss: /atom.xml
+  About me: /about-me
+
+# Content
+excerpt_link: Read More
+fancybox: flase
+
+# Sidebar
+sidebar: right
+widgets:
+- category
+- tag
+- tagcloud
+- archive
+- recent_posts
+- links
+
+# Links
+links:
+  Old_Blog_Diandian : http://linzhexi.diandian.com/
+
+# Miscellaneous
+google_analytics: UA-56285224-2
+favicon: /favicon.png
+twitter:
+google_plus:
+fb_admins: 
+fb_app_id:
+
+# Duoshuo
+duoshuo_shortname: edward7l
+
+# Baidu share
+baidushare: true
+</pre></pre></pre>
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://edward-l.github.io/2014/08/26/安装 mamp 后怎么从terminal 中使用mysql/" data-id="ci796x2uw0008fjts2rytx7zg" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://edward-l.github.io/2015/03/14/hexo 安装&配置/" data-id="ci796x2wi003cfjtsvwqnjr00" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://edward-l.github.io/2014/08/26/安装 mamp 后怎么从terminal 中使用mysql/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://edward-l.github.io/2015/03/14/hexo 安装&配置/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mamp/">mamp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/terminal/">terminal</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
     </footer>
   </div>
   
-</article>
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/03/13/raspbian pi 配置&技巧/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">raspbian pi 配置&amp;技巧</div>
+    </a>
+  
+</nav>
 
   
-  
+</article>
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2015/03/14/hexo 安装&amp;配置/" data-title="hexo 安装&amp;配置" data-url="http://edward-l.github.io/2015/03/14/hexo 安装&amp;配置/"></div>
+  </section>
 </section>
         
           <aside id="sidebar">
