@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>c++ 继承&amp;派生 | Edward_L&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="设计一个Person类，它有两个派生类Student和Employee，Employee有两个派生类Faculty和Staff。•Person类有一个string类型的名字name，string型的身份号id，string型的电话号码phonenumber, Person类构造函数的对应name的参数不能有默认形参值。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++ 继承&派生">
+<meta property="og:url" content="http://edward-l.github.io/2014/12/07/c++ 继承&派生/index.html">
+<meta property="og:site_name" content="Edward_L's Blog">
+<meta property="og:description" content="设计一个Person类，它有两个派生类Student和Employee，Employee有两个派生类Faculty和Staff。•Person类有一个string类型的名字name，string型的身份号id，string型的电话号码phonenumber, Person类构造函数的对应name的参数不能有默认形参值。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c++ 继承&派生">
+<meta name="twitter:description" content="设计一个Person类，它有两个派生类Student和Employee，Employee有两个派生类Faculty和Staff。•Person类有一个string类型的名字name，string型的身份号id，string型的电话号码phonenumber, Person类构造函数的对应name的参数不能有默认形参值。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-56285224-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Edward_L&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">活着就是为了折腾</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about-me">About me</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="edward-l.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-c++ 继承&amp;派生" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/07/c++ 继承&派生/" class="article-date">
+  <time datetime="2014-12-07T07:30:16.000Z" itemprop="datePublished">Dec 7 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/c/">c++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      c++ 继承&amp;派生
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>设计一个Person类，它有两个派生类Student和Employee，Employee有两个派生类Faculty和Staff。<br>•Person类有一个string类型的名字name，string型的身份号id，string型的电话号码phonenumber, Person类构造函数的对应name的参数不能有默认形参值。<br><a id="more"></a><br>•Student类有一个年级grade属性（Freshman、Sophomore、Junior或Senior），将属性值定义为常量；<br>•Employee类有一个string型的办公地点office，一个double型的月薪水salary和一个MyDate型的雇佣日期dateHired；<br>•Faculty类有一个级别rank属性（Professor = 3、 AssociateProfessor = 2、AssistantProfessor = 1），属性值也定义成常量。教师的薪水的计算方式为“薪水=基本工资×级别”；<br>•Staff类有一个职务position属性，为string类型，教工的薪水计算方式为“薪水=基本工资+津贴×工作年数”。工作年数算到2010年1月1日为止，基本工资BasicWages、津贴Allowance定义为常量。<br>•上述5个类都有一个print成员函数来输出该类对象除薪水外的基本信息。<br> •MyDate类有year、month、day三个数据成员，有一个计算两个MyDate对象间年差的成员函数diffYear(MyDate &amp;)，年差计算只精确到月；三个数据成员的获取器函数。  定义上述类，并合理地补充构造函数和其它需要的函数。<br>    在main函数中，定义一个Person类对象，一个Student类对象和一个Employee类对象一个Faculty类对象和一个Staff类对象。输出Person类及其派生类对象的基本信息，并输出Faculty类对象和Staff类对象的薪水。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  7-1</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by  Edward.L on 12/7/14.</span></span><br><span class="line"><span class="comment">//  Copyright (c) 2014  Edward.L. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> Freshman    1</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> Sophomore   2</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> Junior      3</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> Senior      4</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> Professor           3</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> AssociateProfessor  2</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> AssistantProfessor  1</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> BasicWages          8000</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> Allowance           3000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> MyDate&#123;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> year;</span><br><span class="line">    <span class="keyword">int</span> month;</span><br><span class="line">    <span class="keyword">int</span> day;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">diffYear</span><span class="params">(MyDate date1, MyDate date2)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (date1.year &gt; date2.year)</span><br><span class="line">            <span class="keyword">if</span> (date1.month &gt; date2.month)</span><br><span class="line">                <span class="keyword">return</span> ((date1.year - date2.year) * <span class="number">12</span> + date1.month - date2.month);</span><br><span class="line">            <span class="function"><span class="keyword">else</span></span><br><span class="line">                <span class="title">return</span> <span class="params">((date1.year - 1 - date2.year)</span> * 12 + date1.month + 12 - date2.month)</span>;</span><br><span class="line">        <span class="function"><span class="keyword">else</span></span><br><span class="line">            <span class="title">if</span> <span class="params">(date1.month &gt; date2.month)</span></span><br><span class="line">                <span class="title">return</span> <span class="params">(date2.month + 12 - date1.month + (date2.year - 1 - date1.year)</span> * 12)</span>;</span><br><span class="line">            <span class="function"><span class="keyword">else</span></span><br><span class="line">                <span class="title">return</span> <span class="params">(date2.month - date1.month + (date2.year - date1.year)</span> * 12)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"year is "</span> &lt;&lt; year &lt;&lt; <span class="string">" month is "</span> &lt;&lt; month &lt;&lt; <span class="string">" day is  "</span>&lt;&lt; day &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(MyDate a)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">" year is "</span> &lt;&lt; a.year &lt;&lt; <span class="string">" tmonth is "</span> &lt;&lt; a.month &lt;&lt; <span class="string">" tday is "</span>&lt;&lt;a.day&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    MyDate()</span><br><span class="line">    &#123;</span><br><span class="line">        year  = <span class="number">0</span>;</span><br><span class="line">        month = <span class="number">0</span>;</span><br><span class="line">        day   = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    MyDate(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span><br><span class="line">    &#123;</span><br><span class="line">        year  = x;</span><br><span class="line">        month = y;</span><br><span class="line">        day   = z;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">give</span><span class="params">(MyDate &amp;a)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        year     = a.year;</span><br><span class="line">        month = a.month;</span><br><span class="line">        day  = a.day;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Person &#123;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">string</span> name;</span><br><span class="line">    <span class="built_in">string</span> id;</span><br><span class="line">    <span class="built_in">string</span> phonenumber;</span><br><span class="line">    </span><br><span class="line">    Person(<span class="built_in">string</span> a)</span><br><span class="line">    &#123;</span><br><span class="line">        name = a;</span><br><span class="line">        id = <span class="string">"0"</span>;</span><br><span class="line">        phonenumber = <span class="string">"0"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Person(<span class="built_in">string</span> a, <span class="built_in">string</span> b, <span class="built_in">string</span> c)</span><br><span class="line">    &#123;</span><br><span class="line">        name = a;</span><br><span class="line">        id = b;</span><br><span class="line">        phonenumber = c;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"name : "</span> &lt;&lt; name &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"id : "</span> &lt;&lt; id &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"phonenumber : "</span> &lt;&lt; phonenumber &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Student:<span class="keyword">public</span> Person</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> grade;</span><br><span class="line"></span><br><span class="line">    Student(<span class="built_in">string</span> a, <span class="built_in">string</span> b, <span class="built_in">string</span> c, <span class="keyword">int</span> d):Person(a, b, c)</span><br><span class="line">    &#123;</span><br><span class="line">        grade = d;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"name : "</span> &lt;&lt; name &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"id : "</span> &lt;&lt; id &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"phonenumber : "</span> &lt;&lt; phonenumber &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"grade : "</span> &lt;&lt; grade &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Employee : <span class="keyword">public</span> Person</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> office;</span><br><span class="line">    <span class="keyword">double</span> salary;</span><br><span class="line">    MyDate dateHired;</span><br><span class="line">    </span><br><span class="line">    Employee(<span class="built_in">string</span> a, <span class="built_in">string</span> b,<span class="built_in">string</span> c, <span class="built_in">string</span> d, <span class="keyword">double</span> e, MyDate f ) : Person(a,b,c)</span><br><span class="line">    &#123;</span><br><span class="line">        office = d;</span><br><span class="line">        salary = e;</span><br><span class="line">        dateHired.give(f);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"name : "</span> &lt;&lt; name &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"id : "</span> &lt;&lt; id &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"phonenumber : "</span> &lt;&lt; phonenumber &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"office : "</span> &lt;&lt; office &lt;&lt; endl;</span><br><span class="line">        dateHired.print(dateHired);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Faculty : <span class="keyword">public</span> Employee</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> rank;</span><br><span class="line">    </span><br><span class="line">    Faculty(<span class="built_in">string</span> a, <span class="built_in">string</span> b, <span class="built_in">string</span> c, <span class="built_in">string</span> d, <span class="keyword">double</span> e, MyDate f, <span class="keyword">int</span> g) : Employee(a, b, c, d, e,f)</span><br><span class="line">    &#123;</span><br><span class="line">        rank = g;</span><br><span class="line">        salary = BasicWages * rank;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"name : "</span> &lt;&lt; name &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"id : "</span> &lt;&lt; id &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"phonenumber : "</span> &lt;&lt; phonenumber &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"office : "</span> &lt;&lt; office &lt;&lt; endl;</span><br><span class="line">        dateHired.print(dateHired);</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"rank : "</span>&lt;&lt;rank&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">prints</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"salary is "</span> &lt;&lt; salary &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Staff : <span class="keyword">public</span> Employee</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> position;</span><br><span class="line">    </span><br><span class="line">    Staff(<span class="built_in">string</span> a, <span class="built_in">string</span> b, <span class="built_in">string</span> c, <span class="built_in">string</span> d, <span class="keyword">double</span> e, MyDate f, <span class="built_in">string</span> g) : Employee(a, b, c, d, e,f)</span><br><span class="line">    &#123;</span><br><span class="line">        position = g;</span><br><span class="line">        salary = BasicWages + (<span class="number">2010</span> - f.year) * Allowance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"name : "</span> &lt;&lt; name &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"id : "</span> &lt;&lt; id &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"phonenumber : "</span> &lt;&lt; phonenumber &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"office : "</span> &lt;&lt; office &lt;&lt; endl;</span><br><span class="line">        dateHired.print(dateHired);</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"position : "</span>&lt;&lt;position&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">prints</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"salary is "</span> &lt;&lt; salary &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">MyDate <span class="title">M1</span><span class="params">(2001, 12, 4)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">Person   <span class="title">person</span><span class="params">("Edward_L")</span></span>;</span><br><span class="line">    <span class="function">Student  <span class="title">stu</span><span class="params">("ddog",   "1", "1234", Sophomore)</span></span>;</span><br><span class="line">    <span class="function">Employee <span class="title">emp</span><span class="params">("chennuo", "2", "12345", "hangzhou", 5000, M1)</span></span>;</span><br><span class="line">    <span class="function">Faculty  <span class="title">fac</span><span class="params">("michelle", "3", "123456",  "shanghai", 4000, M1, Professor)</span></span>;</span><br><span class="line">    <span class="function">Staff    <span class="title">sta</span><span class="params">("niko",   "4", "1234567",  "beijing", 8000, M1,"employee")</span></span>;</span><br><span class="line">    </span><br><span class="line">    person.print();</span><br><span class="line">    stu.print();</span><br><span class="line">    emp.print();</span><br><span class="line">    fac.print();</span><br><span class="line">    fac.prints();</span><br><span class="line">    sta.print();</span><br><span class="line">    sta.prints();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://edward-l.github.io/2014/12/07/c++ 继承&派生/" data-id="ci78sw54f0034sbtslvqywzeo" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="http://edward-l.github.io/2014/12/07/c++ 继承&派生/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/12/07/c++ 类&对象（二）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          c++ 类&amp;对象（二）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/12/01/autumn&defoliation/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">autumn&amp;defoliation</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2014/12/07/c++ 继承&amp;派生/" data-title="c++ 继承&amp;派生" data-url="http://edward-l.github.io/2014/12/07/c++ 继承&amp;派生/"></div>
+  </section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/life/">life</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/sql-injection/">sql_injection</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tools/">tools</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/writeup/">writeup</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/za/">za</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標簽</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2-Dimensional-Graphics/">2-Dimensional Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/3-Dimensional-Graphics/">3-Dimensional Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M-Files-and-User-defiend-Functions/">M-Files and User-defiend Functions</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/The-Harvester/">The Harvester</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alictf/">alictf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app控制电脑锁屏/">app控制电脑锁屏</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/base64/">base64</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/client/">client</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/curl/">curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hduisa-ctf/">hduisa_ctf</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iis-php-bypass/">iis+php_bypass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/limit注入/">limit注入</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mamp/">mamp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/">matlab</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/msf/">msf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nmap/">nmap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sctf/">sctf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/socket/">socket</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql-injection/">sql_injection</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/terminal/">terminal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/">thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/threading/">threading</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序/">排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/散列/">散列</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標簽雲</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/2-Dimensional-Graphics/" style="font-size: 10px;">2-Dimensional Graphics</a><a href="/tags/3-Dimensional-Graphics/" style="font-size: 10px;">3-Dimensional Graphics</a><a href="/tags/M-Files-and-User-defiend-Functions/" style="font-size: 10px;">M-Files and User-defiend Functions</a><a href="/tags/The-Harvester/" style="font-size: 10px;">The Harvester</a><a href="/tags/alictf/" style="font-size: 10px;">alictf</a><a href="/tags/app控制电脑锁屏/" style="font-size: 10px;">app控制电脑锁屏</a><a href="/tags/base64/" style="font-size: 10px;">base64</a><a href="/tags/c/" style="font-size: 20px;">c++</a><a href="/tags/client/" style="font-size: 10px;">client</a><a href="/tags/curl/" style="font-size: 10px;">curl</a><a href="/tags/hduisa-ctf/" style="font-size: 11.43px;">hduisa_ctf</a><a href="/tags/iis-php-bypass/" style="font-size: 10px;">iis+php_bypass</a><a href="/tags/life/" style="font-size: 10px;">life</a><a href="/tags/limit注入/" style="font-size: 11.43px;">limit注入</a><a href="/tags/mamp/" style="font-size: 10px;">mamp</a><a href="/tags/matlab/" style="font-size: 12.86px;">matlab</a><a href="/tags/msf/" style="font-size: 10px;">msf</a><a href="/tags/nmap/" style="font-size: 10px;">nmap</a><a href="/tags/python/" style="font-size: 18.57px;">python</a><a href="/tags/sctf/" style="font-size: 10px;">sctf</a><a href="/tags/server/" style="font-size: 10px;">server</a><a href="/tags/socket/" style="font-size: 15.71px;">socket</a><a href="/tags/sql-injection/" style="font-size: 17.14px;">sql_injection</a><a href="/tags/terminal/" style="font-size: 10px;">terminal</a><a href="/tags/thread/" style="font-size: 10px;">thread</a><a href="/tags/threading/" style="font-size: 11.43px;">threading</a><a href="/tags/多线程/" style="font-size: 14.29px;">多线程</a><a href="/tags/排序/" style="font-size: 10px;">排序</a><a href="/tags/散列/" style="font-size: 10px;">散列</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">歸檔</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/02/06/hduisa_ctf_week2_writeup/">hduisa_ctf_week2_writeup</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/06/SQL Injections in MySQL LIMIT clause/">SQL Injections in MySQL LIMIT clause</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/28/hduisa_ctf_week1_writeup/">hduisa_ctf_week1_writeup</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/13/learn c++ in few minutes/">learn c++ in few minutes</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/06/排序小结/">排序小结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情鏈接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://linzhexi.diandian.com/" target="_blank">Old_Blog_Diandian</a>
+          </li>
+        
+          <li>
+            <a href="http://lightless.me/" target="_blank">lightless_Blog</a>
+          </li>
+        
+          <li>
+            <a href="http://evilddog.github.io/" target="_blank">DDog_Blog</a>
+          </li>
+        
+          <li>
+            <a href="http://queengina.com/" target="_blank">queengina_Blog</a>
+          </li>
+        
+          <li>
+            <a href="http://veightz.net/" target="_blank">veightz_Blog</a>
+          </li>
+        
+          <li>
+            <a href="http://blog.csdn.net/xboxmicro/" target="_blank">panda_Blog</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Edward_L<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about-me" class="mobile-nav-link">About me</a>
+  
+</nav>
+    
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"edward7l"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+  </div>
+</body>
+</html>
