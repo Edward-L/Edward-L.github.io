@@ -997,22 +997,8 @@ input.menu-search-input {
   background-image: url("/images/searchicon.png");
   background-size: 15px 15px;
 }
-.menu .menu-item-search .st-search-input {
-  width: 80px;
-  float: left;
-}
-.theme-next-mist .menu .menu-item-search .st-search-input {
-  float: none;
-}
-@media screen and (max-width: 767px) {
-  .menu .menu-item-search {
-    margin-bottom: 15px;
-    display: block;
-  }
-  .menu .menu-item-search .st-search-input {
-    width: auto;
-    float: none;
-  }
+form.menu-item.menu-item-serach {
+  padding: 40px;
 }
 .translation {
   margin-top: -20px;
@@ -1171,7 +1157,7 @@ input.menu-search-input {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #e2c6ec;
+  background: #785e6f;
 }
 .sidebar-nav {
   margin: 0;
