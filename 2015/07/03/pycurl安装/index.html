@@ -18,7 +18,7 @@
 
 
 
-  <meta name="keywords" content="2-Dimensional Graphics,matlab," />
+  <meta name="keywords" content="pycurl,python," />
 
 
 
@@ -31,7 +31,7 @@
 
 
 
-  <title> matlab 2-Dimensional Graphics // Edward_L's Blog </title>
+  <title> pycurl安装 // Edward_L's Blog </title>
 </head>
 
 <body>
@@ -119,7 +119,7 @@
           
           
             
-              matlab 2-Dimensional Graphics
+              pycurl安装
             
           
         </h1>
@@ -127,14 +127,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2014-12-01
+          Posted on 2015-07-03
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/matlab/">matlab</a>
+              <a href="/categories/python/">python</a>
 
               
               
@@ -147,8 +147,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/12/01/matlab 2-Dimensional Graphics/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/12/01/matlab 2-Dimensional Graphics/"></span>
+            <a href="/2015/07/03/pycurl安装/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/03/pycurl安装/"></span>
             </a>
           </span>
           
@@ -162,10 +162,13 @@
       
 
       
-        <p><em>Try to show the function graphs of sinx and cosx.<br>Requirement: Two curves should be plotted in the same figure window, where the sine curve is shown by a solid line, the cosine by a dashed line, and they also should be shown in different colors and indicated by legend. Use grid. Set the range of x to be [-2pi, 2pi].</em><br><a id="more"></a><br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span>=<span class="title">e31</span></span></span><br><span class="line">x = -<span class="number">2</span> * <span class="built_in">pi</span>:<span class="number">0.001</span>:<span class="number">2</span> * <span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">sin</span>(x);</span><br><span class="line">y2 = <span class="built_in">cos</span>(x);</span><br><span class="line">plot(x,y1,<span class="string">'-b'</span>,x,y2,<span class="string">'--r'</span>);</span><br><span class="line">grid on;</span><br></pre></td></tr></table></figure></p>
-<p><em>Plot the voltages of the three-phase alternating current with the amplitude 220V, the frequency 60Hz, and the phase difference<br>120 degree. (Show the waveform of two periods, along with a zero line)</em><br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span>=<span class="title">e32</span></span></span><br><span class="line">t = <span class="number">0</span>:<span class="number">0.0001</span>:<span class="number">80</span>;</span><br><span class="line">u1 = <span class="number">220</span> * <span class="built_in">sin</span>(<span class="number">2</span> * <span class="built_in">pi</span> / <span class="number">60</span> * t);</span><br><span class="line">u2 = <span class="number">220</span> * <span class="built_in">sin</span>(<span class="number">2</span> * <span class="built_in">pi</span> / <span class="number">60</span> * t - <span class="built_in">pi</span> / <span class="number">3</span> * <span class="number">2</span>);</span><br><span class="line">u3 = <span class="number">220</span> * <span class="built_in">sin</span>(<span class="number">2</span> * <span class="built_in">pi</span> / <span class="number">60</span> * t - <span class="built_in">pi</span> / <span class="number">3</span> * <span class="number">4</span>);</span><br><span class="line">plot(t,u1,<span class="string">'b'</span>,t,u2,<span class="string">'r'</span>,t,u3,<span class="string">'g'</span>);</span><br></pre></td></tr></table></figure></p>
-<p><em>Plot the following function curves:</em><br>y1=150e^(0.05x)<em>sinx,<br>y2=0.8e^(0.5x)</em>sin(10x).<br><em>Requirement:: Plot in a single figure<br>window. The range of x is [0,20]. Set the<br>ordinate of y1 to be 150 times of y2 .</em><br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span>=<span class="title">e33</span></span></span><br><span class="line">x= <span class="number">0</span>:<span class="number">0.01</span>:<span class="number">20</span>;</span><br><span class="line">y1 = <span class="number">150</span> * <span class="built_in">exp</span>(-<span class="number">0.05</span> * x) * <span class="built_in">sin</span>(x);</span><br><span class="line">y2 = <span class="number">0.8</span> * <span class="built_in">exp</span>(-<span class="number">0.5</span> * x) * <span class="built_in">sin</span>(<span class="number">10</span> * x);</span><br><span class="line"><span class="matrix">[AX,H1,H2]</span> = plotyy(x,y1,x,y2,<span class="string">'plot'</span>);<span class="comment">%%得到plotyy的返回值</span></span><br><span class="line">set(AX(<span class="number">1</span>),<span class="string">'XColor'</span>,<span class="string">'k'</span>,<span class="string">'YColor'</span>,<span class="string">'b'</span>);<span class="comment">%%AX(1)控制左边纵轴</span></span><br><span class="line">set(AX(<span class="number">2</span>),<span class="string">'XColor'</span>,<span class="string">'k'</span>,<span class="string">'YColor'</span>,<span class="string">'r'</span>);<span class="comment">%%AX(2)控制右边纵轴</span></span><br><span class="line">HH1 = get(AX(<span class="number">1</span>),<span class="string">'Ylabel'</span>);</span><br><span class="line">set(HH1,<span class="string">'String'</span>,<span class="string">'y1'</span>);<span class="comment">%%设置左边纵轴标注</span></span><br><span class="line">set(HH1,<span class="string">'color'</span>,<span class="string">'b'</span>);<span class="comment">%%线型颜色</span></span><br><span class="line">HH2 = get(AX(<span class="number">2</span>),<span class="string">'Ylabel'</span>);</span><br><span class="line">set(HH2,<span class="string">'String'</span>,<span class="string">'y2'</span>);<span class="comment">%%设置右边纵轴标注</span></span><br><span class="line">set(HH2,<span class="string">'color'</span>,<span class="string">'r'</span>);<span class="comment">%%线型颜色</span></span><br></pre></td></tr></table></figure></p>
-<p><em>Plot the curves of y=lnx in x-logarithmic scale, y-logarithmic scale and<br>xy-logarithmic scale, respectively. Plot them separately in 3 subplots of a same window,with different titles. Use grid. X range is [0,1000]</em><br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">0</span>:<span class="number">1</span>:<span class="number">1000</span>;</span><br><span class="line">y = <span class="command">log</span>(x);</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">1</span>);</span><br><span class="line">semilogx(y);</span><br><span class="line">grid <span class="function_start"><span class="keyword">on</span></span>;</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>);</span><br><span class="line">semilogy(y);</span><br><span class="line">grid <span class="function_start"><span class="keyword">on</span></span>;</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>);</span><br><span class="line">loglog(y);</span><br><span class="line">grid <span class="function_start"><span class="keyword">on</span></span>;</span><br></pre></td></tr></table></figure></p>
+        <p>昨晚在安装pycurl的时候遇到了点问题，记录下解决的方法。<br><a id="more"></a><br>首先尝试用<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip <span class="keyword">install</span> pycurl</span><br></pre></td></tr></table></figure></p>
+<p>出现了这样的错误<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">error</span>: command 'cc' failed <span class="keyword">with</span> <span class="keyword">exit</span> status <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>尝试执行以下命令<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-<span class="built_in">select</span> <span class="comment">--install</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来在装lxml时又出现了问题。提示libxml/xmlversion.h 却少。<br>边google边分析，安装pycurl，依赖python包lxml,而lxml依赖库函数，什么是库函数，并不是python安装包，所以你是无法pip intall.所以我用brew来安装所需要的库函数。<br>然后又发现了一个坑，网上一般都只让你执行以下内容：<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew <span class="keyword">install</span> libxml2</span><br><span class="line">brew <span class="keyword">install</span> libxslt</span><br></pre></td></tr></table></figure></p>
+<p>然而你会发现这样并没有什么用。<br>所以继续找问题。<br>在尝试了很多中可能性之后，成功的解决。<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brew install libxml2</span><br><span class="line">brew install libxslt</span><br><span class="line">brew <span class="literal">link</span> libxml2 --<span class="literal">force</span></span><br><span class="line">brew <span class="literal">link</span> libxslt --<span class="literal">force</span></span><br></pre></td></tr></table></figure></p>
+<p>如果还是没用，请先执行<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew <span class="keyword">unlink</span> libxml2</span><br><span class="line">brew <span class="keyword">unlink</span> libxslt</span><br></pre></td></tr></table></figure></p>
+<p>在执行上面的内容。<br>成功解决问题！</p>
 
       
     </div>
@@ -174,9 +177,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/2-Dimensional-Graphics/"> #2-Dimensional Graphics </a>
+            <a href="/tags/pycurl/"> #pycurl </a>
           
-            <a href="/tags/matlab/"> #matlab </a>
+            <a href="/tags/python/"> #python </a>
           
         </div>
       
@@ -185,13 +188,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2014/12/01/autumn&defoliation/">autumn&defoliation</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/11/29/c＋＋ 类与对象（一）/">c＋＋ 类与对象（一）</a>
+              <a href="/2015/07/03/正则断言/">正则断言</a>
             
           </div>
         </div>
@@ -207,8 +208,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2014/12/01/matlab 2-Dimensional Graphics/"
-               data-title="matlab 2-Dimensional Graphics" data-url="http://edward-l.github.io/2014/12/01/matlab 2-Dimensional Graphics/">
+          <div class="ds-thread" data-thread-key="2015/07/03/pycurl安装/"
+               data-title="pycurl安装" data-url="http://edward-l.github.io/2015/07/03/pycurl安装/">
           </div>
         
       </div>
