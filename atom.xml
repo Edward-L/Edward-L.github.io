@@ -4,7 +4,7 @@
   <subtitle><![CDATA[活着就是为了折腾]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://edward-l.github.io/"/>
-  <updated>2015-07-03T05:29:11.000Z</updated>
+  <updated>2015-07-03T06:09:26.000Z</updated>
   <id>http://edward-l.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://edward-l.github.io/2015/07/03/pycurl%E5%AE%89%E8%A3%85/"/>
     <id>http://edward-l.github.io/2015/07/03/pycurl安装/</id>
     <published>2015-07-03T05:30:16.000Z</published>
-    <updated>2015-07-03T05:29:11.000Z</updated>
+    <updated>2015-07-03T06:09:26.000Z</updated>
     <content type="html"><![CDATA[<p>昨晚在安装pycurl的时候遇到了点问题，记录下解决的方法。<br><a id="more"></a><br>首先尝试用<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip <span class="keyword">install</span> pycurl</span><br></pre></td></tr></table></figure></p>
 <p>出现了这样的错误<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">error</span>: command 'cc' failed <span class="keyword">with</span> <span class="keyword">exit</span> status <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <p>尝试执行以下命令<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-<span class="built_in">select</span> <span class="comment">--install</span></span><br></pre></td></tr></table></figure></p>
