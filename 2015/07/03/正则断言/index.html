@@ -153,8 +153,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2015/07/03/正则断言/"class="leancloud_visitors" data-flag-title="正则断言">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -168,6 +178,10 @@
 <p>这里面的pattern是一个正则表达式。<br>如同^代表开头，$代表结尾，\b代表单词边界一样，先行断言和后行断言也有类似的作用，它们只匹配某些位置，在匹配过程中，不占用字符，所以被称为“零宽”。所谓位置，是指字符串中(每行)第一个字符的左边、最后一个字符的右边以及相邻字符的中间（假设文字方向是头左尾右）。<br>下面分别举例来说明这4种断言的含义。<br><code>(?=pattern)</code> 正向先行断言<br>代表字符串中的一个位置，紧接该位置之后的字符序列能够匹配pattern。<br>例如对<code>”a regular expression”</code>这个字符串，要想匹配regular中的re，但不能匹配expression中的re，可以用<code>”re(?=gular)”</code>，该表达式限定了re右边的位置，这个位置之后是gular，但并不消耗gular这些字符，将表达式改为<code>”re(?=gular).”</code>，将会匹配reg，元字符.匹配了g，括号这一砣匹配了e和g之间的位置。<br><code>(?!pattern)</code> 负向先行断言<br>代表字符串中的一个位置，紧接该位置之后的字符序列不能匹配pattern。<br>例如对<code>”regex represents regular expression”</code>这个字符串，要想匹配除regex和regular之外的re，可以用<code>”re(?!g)”</code>，该表达式限定了re右边的位置，这个位置后面不是字符g。负向和正向的区别，就在于该位置之后的字符能否匹配括号中的表达式。<br><code>(?&lt;=pattern)</code> 正向后行断言<br>代表字符串中的一个位置，紧接该位置之前的字符序列能够匹配pattern。<br>例如对<code>”regex represents regular expression”</code>这个字符串，有4个单词，要想匹配单词内部的re，但不匹配单词开头的re，可以用<code>”(?&lt;=\w)re”</code>，单词内部的re，在re前面应该是一个单词字符。之所以叫后行断言，是因为正则表达式引擎在匹配字符串和表达式时，是从前向后逐个扫描字符串中的字符，并判断是否与表达式符合，当在表达式中遇到该断言时，正则表达式引擎需要往字符串前端检测已扫描过的字符，相对于扫描方向是向后的。<br><code>(?&lt;!pattern)</code> 负向后行断言<br>代表字符串中的一个位置，紧接该位置之前的字符序列不能匹配pattern。<br>例如对<code>”regex represents regular expression”</code>这个字符串，要想匹配单词开头的re，可以用<code>”(?&lt;!\w)re”</code>。单词开头的re，在本例中，也就是指不在单词内部的re，即re前面不是单词字符。当然也可以用<code>”\bre”</code>来匹配。</p>
 
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -349,7 +363,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -914,6 +928,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>

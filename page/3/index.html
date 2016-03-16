@@ -157,8 +157,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2015/01/28/hduisa_ctf_week1_writeup/"class="leancloud_visitors" data-flag-title="hduisa_ctf_week1_writeup">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -175,6 +185,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -246,8 +260,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2015/01/13/learn c++ in few minutes/"class="leancloud_visitors" data-flag-title="learn c++ in few minutes">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -268,6 +292,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -337,8 +365,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2015/01/06/排序小结/"class="leancloud_visitors" data-flag-title="排序小结">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -358,6 +396,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -429,8 +471,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/12/22/c++ 友元&运算符重载/"class="leancloud_visitors" data-flag-title="c++ 友元&运算符重载">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -447,6 +499,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -516,8 +572,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/12/15/matlab 3-Dimensional Graphics/"class="leancloud_visitors" data-flag-title="matlab 3-Dimensional Graphics">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -534,6 +600,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -605,8 +675,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/12/12/c＋＋多态实现/"class="leancloud_visitors" data-flag-title="c＋＋多态实现">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -623,6 +703,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -692,8 +776,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/12/09/mintree/"class="leancloud_visitors" data-flag-title="mintree">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -710,6 +804,10 @@
           </div>
         
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -851,7 +949,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -1097,6 +1195,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>

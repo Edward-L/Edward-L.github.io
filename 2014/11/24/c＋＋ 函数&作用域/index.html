@@ -153,8 +153,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/11/24/c＋＋ 函数&作用域/"class="leancloud_visitors" data-flag-title="c＋＋ 函数&作用域">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -168,6 +178,10 @@
 <p>3、编写程序计算一个人的生物节律指数，它是生理、智力和情绪指数之和。情绪周期是一个正弦曲线，其振幅为1，周期为28天，在给定的一天内，一个人的情绪指数是，是他的年龄（以天计算）类似地，生理和智力周期也是正弦曲线，振幅为1，周期分别是23天和33天。<br>•编写输入年月日计算天输的函数computeday；<br>•编写计算生理指数的函数compute_physiological_index；<br>•编写计算情绪指数的函数compute_emotional_index；<br>•编写计算智力指数的函数compute_mentality_index；<br>•在主程序中输入年月日，计算生物节指数并输出；</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  4-3</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by  Edward.L on 11/24/14.</span></span><br><span class="line"><span class="comment">//  Copyright (c) 2014  Edward.L. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;math.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> PI 3.1415926</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> physiological, emotional, mentality, biology;</span><br><span class="line"><span class="keyword">int</span> sumdays;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">computeday</span><span class="params">(<span class="keyword">int</span> year, <span class="keyword">int</span> month, <span class="keyword">int</span> day)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> birthyear, birthmonth, birthday;</span><br><span class="line">    <span class="keyword">int</span> sum1, sum2;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> days[] = &#123;<span class="number">0</span>, <span class="number">31</span>, <span class="number">59</span>, <span class="number">90</span>, <span class="number">120</span>, <span class="number">151</span>, <span class="number">181</span>, <span class="number">212</span>, <span class="number">243</span>, <span class="number">273</span>, <span class="number">304</span>, <span class="number">334</span>, <span class="number">365</span>&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入生日日期（年月日）："</span> &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; birthyear &gt;&gt; birthmonth &gt;&gt; birthday;</span><br><span class="line">    </span><br><span class="line">    sum1 = (birthyear - <span class="number">1</span>) * <span class="number">365</span> + days[birthmonth - <span class="number">1</span>] + birthday;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= birthyear; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((i % <span class="number">4</span> == <span class="number">0</span> &amp;&amp; i % <span class="number">100</span> != <span class="number">0</span>)|| (i % <span class="number">400</span> == <span class="number">0</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            sum1 += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sum2 = (year - <span class="number">1</span>) * <span class="number">365</span> + days[month - <span class="number">1</span>] + day;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= birthyear; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((i % <span class="number">4</span> == <span class="number">0</span> &amp;&amp; i % <span class="number">100</span> != <span class="number">0</span>)|| (i % <span class="number">400</span> == <span class="number">0</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            sum2 += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sumdays = sum2 - sum1;</span><br><span class="line">    <span class="keyword">return</span> sumdays;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">compute_physiological_index</span><span class="params">(<span class="keyword">int</span> age)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    physiological = <span class="built_in">sin</span>(<span class="number">2</span> * PI / <span class="number">23</span> * age);</span><br><span class="line">    <span class="keyword">return</span> physiological;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">compute_emotional_index</span><span class="params">(<span class="keyword">int</span> age)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    emotional = <span class="built_in">sin</span>(<span class="number">2</span> * PI / <span class="number">28</span> * age);</span><br><span class="line">    <span class="keyword">return</span> emotional;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">compute_mentality_index</span><span class="params">(<span class="keyword">int</span> age)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    mentality = <span class="built_in">sin</span>(<span class="number">2</span> * PI / <span class="number">33</span> * age);</span><br><span class="line">    <span class="keyword">return</span> mentality;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">compute_biology_index</span><span class="params">(<span class="keyword">double</span> physiological, <span class="keyword">double</span> emotional, <span class="keyword">double</span> mentality)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    biology = (physiological + emotional + mentality);</span><br><span class="line">    <span class="keyword">return</span> biology;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> year, month, day;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入今天的日期（年 月 日）"</span> &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; year &gt;&gt; month &gt;&gt; day ;</span><br><span class="line">    </span><br><span class="line">    computeday(year, month, day);</span><br><span class="line">    compute_physiological_index(sumdays);</span><br><span class="line">    compute_emotional_index(sumdays);</span><br><span class="line">    compute_mentality_index(sumdays);</span><br><span class="line">    compute_biology_index(physiological, emotional, mentality);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; biology &lt;&lt;endl;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; sumdays &lt;&lt;endl;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -345,7 +359,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -910,6 +924,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>

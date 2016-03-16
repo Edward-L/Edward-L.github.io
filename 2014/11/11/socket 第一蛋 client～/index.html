@@ -153,8 +153,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/11/11/socket 第一蛋 client～/"class="leancloud_visitors" data-flag-title="socket 第一蛋 client～">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -165,6 +175,10 @@
         <p><code>1. 创建 Socket</code><br><code>2. 连接到远程服务器</code><br><code>3. 发送数据</code><br><code>4. 接收回应</code><br>这个有点类似于<code>urllib  urllib2</code> 的功能～<br><a id="more"></a><br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">import <span class="keyword">socket</span> <span class="comment">#for socket</span></span><br><span class="line">import sys <span class="comment">#for exit </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#creat socket</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#AF_INET (ipv4)  </span></span><br><span class="line"><span class="comment">#SOCK_STREAM(tcp)</span></span><br><span class="line">try :</span><br><span class="line">	<span class="keyword">s</span> = <span class="keyword">socket</span>.<span class="keyword">socket</span>(<span class="keyword">socket</span>.AF_INET, <span class="keyword">socket</span>.SOCK_STREAM)</span><br><span class="line">except <span class="keyword">socket</span>.error, msg:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'failed to creat socket.Error code : '</span> + str (msg[<span class="number">0</span>]) + <span class="string">', Error message :'</span> + msg[<span class="number">1</span>]</span><br><span class="line">	sys.<span class="keyword">exit</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'socket created!'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#get ip_adress</span></span><br><span class="line">host = <span class="string">'http://edward-l.github.io'</span> </span><br><span class="line">port = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">	remote_ip = <span class="keyword">socket</span>.<span class="keyword">gethostbyname</span>(host)</span><br><span class="line">except <span class="keyword">socket</span>.gaierror:	</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'Hostname could not be resolved.Exiting'</span></span><br><span class="line">	sys.<span class="keyword">exit</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'ip adress of '</span> + host + <span class="string">' is '</span> + remote_ip</span><br><span class="line"></span><br><span class="line"><span class="keyword">s</span>.<span class="keyword">connect</span>((remote_ip, port))</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'socket connect to '</span> + host + <span class="string">' on ip '</span> + remote_ip</span><br><span class="line"></span><br><span class="line"><span class="comment">#send data to remote server</span></span><br><span class="line">message = <span class="string">"GET / HTTP/1.1\r\n\r\n"</span></span><br><span class="line"></span><br><span class="line">try :</span><br><span class="line">	<span class="keyword">s</span>.sendall(message)</span><br><span class="line">except <span class="keyword">socket</span>.error:</span><br><span class="line">	sys.<span class="keyword">exit</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'message send successfully!'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># receive data</span></span><br><span class="line">reply = <span class="keyword">s</span>.<span class="keyword">recv</span>(<span class="number">4096</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#close</span></span><br><span class="line"><span class="keyword">print</span> reply</span><br><span class="line"></span><br><span class="line"><span class="keyword">s</span>.<span class="keyword">close</span>()</span><br></pre></td></tr></table></figure></p>
 
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -346,7 +360,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -911,6 +925,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>

@@ -153,8 +153,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/11/29/c＋＋ 类与对象（一）/"class="leancloud_visitors" data-flag-title="c＋＋ 类与对象（一）">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -166,6 +176,10 @@
 <p>2、 设计一个名为Account的类，该类满足下述要求：<br>•一个名为id的int型成员，表示账户的身份号；<br>•一个名为balance的double型成员，表示账户余额；<br>•一个名为annualInterestRate的double型数据域，保存当年利率；<br>•以上所有成员的访问和更改函数；<br>•一个名为getMonthlyInterestRate( )的函数，返回月利率；月利率为年利率/12；<br>•一个名为withDraw的函数，从账户中支取指定金额；<br>•一个名为deposit的函数，向账户中存入指定金额；<br>•在mian函数中，创建一个Account对象，其ID为1122，账户余额为20000，年利率为4.5%，使用withDraw函数取出2500美元，使用deposit函数存入3000美元，然后输出账户的余额、月利率。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  5-2</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by  Edward.L on 11/29/14.</span></span><br><span class="line"><span class="comment">//  Copyright (c) 2014  Edward.L. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Account</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">double</span> balance, annualInterestRate;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> c)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        id = a;</span><br><span class="line">        balance = b;</span><br><span class="line">        annualInterestRate = c;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">getMonthlyInterestRate</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> monthly;</span><br><span class="line">        monthly = annualInterestRate / <span class="number">12.0</span>;</span><br><span class="line">        <span class="keyword">return</span> monthly;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">withDraw</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> pay;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"please input the money you need to pay :"</span> &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; pay;</span><br><span class="line">        balance = balance - pay;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">deposit</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> get;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"please input the money you get:"</span> &lt;&lt; endl;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; get;</span><br><span class="line">        balance = balance + get;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">balan</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> balance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    Account account;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">double</span> balance, annulInterestRate;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"please input the id,balance and annuInterestRate："</span> &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; id &gt;&gt; balance &gt;&gt; annulInterestRate;</span><br><span class="line">    </span><br><span class="line">    account.<span class="built_in">set</span>(id, balance, annulInterestRate);</span><br><span class="line">    account.withDraw();</span><br><span class="line">    account.deposit();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"balance = "</span> &lt;&lt; account.balan() &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"MonthlylnterestRate"</span> &lt;&lt; account.getMonthlyInterestRate() &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -343,7 +357,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -908,6 +922,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>

@@ -153,8 +153,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/11/06/初识socket/"class="leancloud_visitors" data-flag-title="初识socket">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -171,6 +181,10 @@
 <h3 id="无连接"><strong><em>无连接</em></strong></h3><p>无连接套接字意味着,无需建立连接就可以进行通讯。但这时,数据到达的顺序,可靠性及数据不重复性就无法保证了。数据报会保留数据边界,这就表示,数据不会像面向连接的协议那样被拆分成小块。不一定会按它们发送的顺序到达。事实上,它们还有可能根本到不了!而且,由于网络的复杂性,数据还可能被重复传送。由于面向连接套接字要提供一些保证,以及要维持虚电路连接,这都是很重的额外负担。数据报没有这些负担,所以它“便宜”。通常能提供更好的性能,更适合某些应用场合。实现这种连接的主要协议就是用户数据报协议(即<code>UDP</code>)。要创建<code>UDP</code>套接字就得在创建的时候, 指定套接字类型为<code>SOCK_DGRAM</code>。<code>SOCK_DGRAM</code>这个名字,也许你已经猜到了,来自于单词“<code>datagram</code>”(数据报)。由于这些套接字使用 <code>Internet</code> 协议来查找网络中的主机,这样形成的整个系统,一 般会由这两个协议(<code>UDP</code> 和 <code>IP</code>)来提及,即 <code>UDP/IP</code>。</p>
 
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -350,7 +364,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -915,6 +929,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>

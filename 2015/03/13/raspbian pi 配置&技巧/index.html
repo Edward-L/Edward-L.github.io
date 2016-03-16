@@ -153,8 +153,18 @@
           </span>
           
         
+
+        
+&nbsp; | &nbsp;
+<span id="/2015/03/13/raspbian pi 配置&技巧/"class="leancloud_visitors" data-flag-title="raspbian pi 配置&技巧">
+         &nbsp;Views
+        </span>
+
+
+
       </div>
     </div>
+
 
     <div class="post-body">
 
@@ -168,6 +178,10 @@
 <h2 id="关于怎样更加愉快的连接ssh">关于怎样更加愉快的连接ssh</h2><p>毕竟我们大多数的时候还是用ssh连接上去的玩耍的，并不是用屏幕的，所以要怎么样才能更加愉快的链接到ssh呢，下面就是几个小技巧和大家分享啦～首先，让树莓派先记住一个wifi的账号和密码，可以在’/etc/wpa_supplicant/wpa_supplicant.conf’中添加查看已经记忆的wifi账号和密码，你自己也可以记住，这样以后出去的时候快就可以用自己的电脑去放一个和你之前就记住的一样的账号和密码，这样你的树莓派就能够自己连接上去啦，当然现在就是要怎么知道树莓派的局域网IP啦，你当然可以用nmap去扫描这个局域网里的22端口的ip，但是这样是不是太不方便了呢！没关系，你可以自行google<a href="http://shumeipai.nxez.com/2014/03/18/let-raspberry-pi-ip-address-is-automatically-reported-to-the-mailbox.html" target="_blank" rel="external">让树莓派自动上报IP地址到邮箱</a>,当然你可能会遇到一些问题,我也遇到了很多问题！<br>下面就给出一些我遇到的问题的解决方法：<br>首先，最好在send-ip-mail.sh中添加HOME=’/root/‘，然后，如果你遇到账户登陆不了，很有可能是你的邮箱没有开启SMTP等服务，开启就可以了～还有部分邮箱登陆的’auth’不是’login’ 而是’plain’～<br>这样就能够愉快的局域网，又能够及时的知道自己局域网的ip了～可以愉快的ssh之后就能够做很多好玩的事啦～</p>
 
       
+
+
+
+
     </div>
 
     <div class="post-footer">
@@ -351,7 +365,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2014 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
@@ -916,6 +930,93 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-56285224-2');ga('send','pageview');
   </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
 
 </body>
 </html>
