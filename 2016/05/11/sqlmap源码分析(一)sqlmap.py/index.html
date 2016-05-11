@@ -1,0 +1,1045 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.2"/>
+
+
+
+
+  <meta name="keywords" content="sqlmap，python," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Edward_L's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+
+  <title> sqlmap源码分析(一)sqlmap.py // Edward_L's Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Edward_L's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+    
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          Home
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          Categories
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          Archives
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          Tags
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about-me">
+          <i class="menu-item-icon icon-about"></i> <br />
+          About
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              sqlmap源码分析(一)sqlmap.py
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-05-11
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/sqlmap/">sqlmap</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/05/11/sqlmap源码分析(一)sqlmap.py/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/11/sqlmap源码分析(一)sqlmap.py/"></span>
+            </a>
+          </span>
+          
+        
+
+        
+&nbsp; | &nbsp;
+<span id="/2016/05/11/sqlmap源码分析(一)sqlmap.py/"class="leancloud_visitors" data-flag-title="sqlmap源码分析(一)sqlmap.py">
+         &nbsp;Views
+        </span>
+
+
+
+      </div>
+    </div>
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="sqlmap-py源码">sqlmap.py源码</h2><a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span><br><span class="line">Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)</span><br><span class="line">See the file 'doc/COPYING' for copying permission</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">sys.dont_write_bytecode = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> lib.utils <span class="keyword">import</span> versioncheck  <span class="comment"># this has to be the first non-standard import</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> bdb</span><br><span class="line"><span class="keyword">import</span> inspect</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> thread</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"></span><br><span class="line">warnings.filterwarnings(action=<span class="string">"ignore"</span>, message=<span class="string">".*was already imported"</span>, category=UserWarning)</span><br><span class="line">warnings.filterwarnings(action=<span class="string">"ignore"</span>, category=DeprecationWarning)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> lib.controller.controller <span class="keyword">import</span> start</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> banner</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> createGithubIssue</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> dataToStdout</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> getSafeExString</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> getUnicode</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> maskSensitiveData</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> setPaths</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> weAreFrozen</span><br><span class="line"><span class="keyword">from</span> lib.core.data <span class="keyword">import</span> cmdLineOptions</span><br><span class="line"><span class="keyword">from</span> lib.core.data <span class="keyword">import</span> conf</span><br><span class="line"><span class="keyword">from</span> lib.core.data <span class="keyword">import</span> kb</span><br><span class="line"><span class="keyword">from</span> lib.core.data <span class="keyword">import</span> logger</span><br><span class="line"><span class="keyword">from</span> lib.core.data <span class="keyword">import</span> paths</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> unhandledExceptionMessage</span><br><span class="line"><span class="keyword">from</span> lib.core.exception <span class="keyword">import</span> SqlmapBaseException</span><br><span class="line"><span class="keyword">from</span> lib.core.exception <span class="keyword">import</span> SqlmapShellQuitException</span><br><span class="line"><span class="keyword">from</span> lib.core.exception <span class="keyword">import</span> SqlmapSilentQuitException</span><br><span class="line"><span class="keyword">from</span> lib.core.exception <span class="keyword">import</span> SqlmapUserQuitException</span><br><span class="line"><span class="keyword">from</span> lib.core.option <span class="keyword">import</span> initOptions</span><br><span class="line"><span class="keyword">from</span> lib.core.option <span class="keyword">import</span> init</span><br><span class="line"><span class="keyword">from</span> lib.core.profiling <span class="keyword">import</span> profile</span><br><span class="line"><span class="keyword">from</span> lib.core.settings <span class="keyword">import</span> LEGAL_DISCLAIMER</span><br><span class="line"><span class="keyword">from</span> lib.core.testing <span class="keyword">import</span> smokeTest</span><br><span class="line"><span class="keyword">from</span> lib.core.testing <span class="keyword">import</span> liveTest</span><br><span class="line"><span class="keyword">from</span> lib.parse.cmdline <span class="keyword">import</span> cmdLineParser</span><br><span class="line"><span class="keyword">from</span> lib.utils.api <span class="keyword">import</span> setRestAPILog</span><br><span class="line"><span class="keyword">from</span> lib.utils.api <span class="keyword">import</span> StdDbOut</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">modulePath</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    This will get us the program's directory, even if we are frozen</span><br><span class="line">    using py2exe</span><br><span class="line">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        _ = sys.executable <span class="keyword">if</span> weAreFrozen() <span class="keyword">else</span> __file__</span><br><span class="line">    <span class="keyword">except</span> NameError:</span><br><span class="line">        _ = inspect.getsourcefile(modulePath)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> getUnicode(os.path.dirname(os.path.realpath(_)), encoding=sys.getfilesystemencoding())</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Main function of sqlmap when running from command line.</span><br><span class="line">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        paths.SQLMAP_ROOT_PATH = modulePath()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            os.path.isdir(paths.SQLMAP_ROOT_PATH)</span><br><span class="line">        <span class="keyword">except</span> UnicodeEncodeError:</span><br><span class="line">            errMsg = <span class="string">"your system does not properly handle non-ASCII paths. "</span></span><br><span class="line">            errMsg += <span class="string">"Please move the sqlmap's directory to the other location"</span></span><br><span class="line">            logger.error(errMsg)</span><br><span class="line">            <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">        setPaths()</span><br><span class="line">        banner()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Store original command line options for possible later restoration</span></span><br><span class="line">        cmdLineOptions.update(cmdLineParser().__dict__)</span><br><span class="line">        initOptions(cmdLineOptions)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> hasattr(conf, <span class="string">"api"</span>):</span><br><span class="line">            <span class="comment"># Overwrite system standard output and standard error to write</span></span><br><span class="line">            <span class="comment"># to an IPC database</span></span><br><span class="line">            sys.stdout = StdDbOut(conf.taskid, messagetype=<span class="string">"stdout"</span>)</span><br><span class="line">            sys.stderr = StdDbOut(conf.taskid, messagetype=<span class="string">"stderr"</span>)</span><br><span class="line">            setRestAPILog()</span><br><span class="line"></span><br><span class="line">        conf.showTime = <span class="keyword">True</span></span><br><span class="line">        dataToStdout(<span class="string">"[!] legal disclaimer: %s\n\n"</span> % LEGAL_DISCLAIMER, forceOutput=<span class="keyword">True</span>)</span><br><span class="line">        dataToStdout(<span class="string">"[*] starting at %s\n\n"</span> % time.strftime(<span class="string">"%X"</span>), forceOutput=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">        init()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> conf.profile:</span><br><span class="line">            profile()</span><br><span class="line">        <span class="keyword">elif</span> conf.smokeTest:</span><br><span class="line">            smokeTest()</span><br><span class="line">        <span class="keyword">elif</span> conf.liveTest:</span><br><span class="line">            liveTest()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                start()</span><br><span class="line">            <span class="keyword">except</span> thread.error <span class="keyword">as</span> ex:</span><br><span class="line">                <span class="keyword">if</span> <span class="string">"can't start new thread"</span> <span class="keyword">in</span> getSafeExString(ex):</span><br><span class="line">                    errMsg = <span class="string">"unable to start new threads. Please check OS (u)limits"</span></span><br><span class="line">                    logger.critical(errMsg)</span><br><span class="line">                    <span class="keyword">raise</span> SystemExit</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> SqlmapUserQuitException:</span><br><span class="line">        errMsg = <span class="string">"user quit"</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            logger.error(errMsg)</span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> (SqlmapSilentQuitException, bdb.BdbQuit):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> SqlmapShellQuitException:</span><br><span class="line">        cmdLineOptions.sqlmapShell = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> SqlmapBaseException <span class="keyword">as</span> ex:</span><br><span class="line">        errMsg = getSafeExString(ex)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            logger.critical(errMsg)</span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        <span class="keyword">print</span></span><br><span class="line"></span><br><span class="line">        errMsg = <span class="string">"user aborted"</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            logger.error(errMsg)</span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> EOFError:</span><br><span class="line">        <span class="keyword">print</span></span><br><span class="line">        errMsg = <span class="string">"exit"</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            logger.error(errMsg)</span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> SystemExit:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">print</span></span><br><span class="line">        errMsg = unhandledExceptionMessage()</span><br><span class="line">        excMsg = traceback.format_exc()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> any(_ <span class="keyword">in</span> excMsg <span class="keyword">for</span> _ <span class="keyword">in</span> (<span class="string">"No space left"</span>, <span class="string">"Disk quota exceeded"</span>)):</span><br><span class="line">                errMsg = <span class="string">"no space left on output device"</span></span><br><span class="line">                logger.error(errMsg)</span><br><span class="line">                <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> <span class="string">"_mkstemp_inner"</span> <span class="keyword">in</span> excMsg:</span><br><span class="line">                errMsg = <span class="string">"there has been a problem while accessing temporary files"</span></span><br><span class="line">                logger.error(errMsg)</span><br><span class="line">                <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> all(_ <span class="keyword">in</span> excMsg <span class="keyword">for</span> _ <span class="keyword">in</span> (<span class="string">"pymysql"</span>, <span class="string">"configparser"</span>)):</span><br><span class="line">                errMsg = <span class="string">"wrong initialization of pymsql detected (using Python3 dependencies)"</span></span><br><span class="line">                logger.error(errMsg)</span><br><span class="line">                <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> <span class="string">"bad marshal data (unknown type code)"</span> <span class="keyword">in</span> excMsg:</span><br><span class="line">                match = re.search(<span class="string">r"\s*(.+)\s+ValueError"</span>, excMsg)</span><br><span class="line">                errMsg = <span class="string">"one of your .pyc files are corrupted%s"</span> % (<span class="string">" ('%s')"</span> % match.group(<span class="number">1</span>) <span class="keyword">if</span> match <span class="keyword">else</span> <span class="string">""</span>)</span><br><span class="line">                errMsg += <span class="string">". Please delete .pyc files on your system to fix the problem"</span></span><br><span class="line">                logger.error(errMsg)</span><br><span class="line">                <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> <span class="string">"valueStack.pop"</span> <span class="keyword">in</span> excMsg <span class="keyword">and</span> kb.get(<span class="string">"dumpKeyboardInterrupt"</span>):</span><br><span class="line">                <span class="keyword">raise</span> SystemExit</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> match <span class="keyword">in</span> re.finditer(<span class="string">r'File "(.+?)", line'</span>, excMsg):</span><br><span class="line">                file_ = match.group(<span class="number">1</span>)</span><br><span class="line">                file_ = os.path.relpath(file_, os.path.dirname(__file__))</span><br><span class="line">                file_ = file_.replace(<span class="string">"\\"</span>, <span class="string">'/'</span>)</span><br><span class="line">                file_ = re.sub(<span class="string">r"\.\./"</span>, <span class="string">'/'</span>, file_).lstrip(<span class="string">'/'</span>)</span><br><span class="line">                excMsg = excMsg.replace(match.group(<span class="number">1</span>), file_)</span><br><span class="line"></span><br><span class="line">            errMsg = maskSensitiveData(errMsg)</span><br><span class="line">            excMsg = maskSensitiveData(excMsg)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> hasattr(conf, <span class="string">"api"</span>):</span><br><span class="line">                logger.critical(<span class="string">"%s\n%s"</span> % (errMsg, excMsg))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                logger.critical(errMsg)</span><br><span class="line">                kb.stickyLevel = logging.CRITICAL</span><br><span class="line">                dataToStdout(excMsg)</span><br><span class="line">                createGithubIssue(errMsg, excMsg)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        kb.threadContinue = <span class="keyword">False</span></span><br><span class="line">        kb.threadException = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> conf.get(<span class="string">"showTime"</span>):</span><br><span class="line">            dataToStdout(<span class="string">"\n[*] shutting down at %s\n\n"</span> % time.strftime(<span class="string">"%X"</span>), forceOutput=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> kb.get(<span class="string">"tempDir"</span>):</span><br><span class="line">            shutil.rmtree(kb.tempDir, ignore_errors=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> conf.get(<span class="string">"hashDB"</span>):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                conf.hashDB.flush(<span class="keyword">True</span>)</span><br><span class="line">            <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> cmdLineOptions.get(<span class="string">"sqlmapShell"</span>):</span><br><span class="line">            cmdLineOptions.clear()</span><br><span class="line">            conf.clear()</span><br><span class="line">            kb.clear()</span><br><span class="line">            main()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> hasattr(conf, <span class="string">"api"</span>):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                conf.database_cursor.disconnect()</span><br><span class="line">            <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> conf.get(<span class="string">"dumper"</span>):</span><br><span class="line">            conf.dumper.flush()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Reference: http://stackoverflow.com/questions/1635080/terminate-a-multi-thread-python-program</span></span><br><span class="line">        <span class="keyword">if</span> conf.get(<span class="string">"threads"</span>, <span class="number">0</span>) &gt; <span class="number">1</span> <span class="keyword">or</span> conf.get(<span class="string">"dnsServer"</span>):</span><br><span class="line">            os._exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h3 id="modulePath()">modulePath()</h3><p>64-69行<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try:</span><br><span class="line">    _ = sys<span class="class">.executable</span> <span class="keyword">if</span> <span class="function"><span class="title">weAreFrozen</span><span class="params">()</span></span> <span class="keyword">else</span> __file__</span><br><span class="line">except NameError:</span><br><span class="line">    _ = inspect.<span class="function"><span class="title">getsourcefile</span><span class="params">(modulePath)</span></span></span><br><span class="line"></span><br><span class="line">return <span class="function"><span class="title">getUnicode</span><span class="params">(os.path.dirname(os.path.realpath(_)</span></span>), encoding=sys.<span class="function"><span class="title">getfilesystemencoding</span><span class="params">()</span></span>)</span><br></pre></td></tr></table></figure></p>
+<p><em>sys.executable</em><br>获取当前python解释器的路径<br><em>weAreFrozen()</em><br>见lib/core/common.py 1181-1188行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weAreFrozen</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Returns whether we are frozen via py2exe.</span><br><span class="line">    This will affect how we find out where we are located.</span><br><span class="line">    Reference: http://www.py2exe.org/index.cgi/WhereAmI</span><br><span class="line">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> hasattr(sys, <span class="string">"frozen"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>hasattr用于确定一个对象是否具有某个属性。<br>语法：<br> hasattr(object, name) -&gt; bool<br>判断sys中是否有frozen属性，返回一个布尔值</p>
+<p><em>getUnicode</em><br>见lib/core/common.py 2155-2189<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getUnicode</span><span class="params">(value, encoding=None, noneToNull=False)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Return the unicode representation of the supplied value:</span><br><span class="line"></span><br><span class="line">    &gt;&gt;&gt; getUnicode(u'test')</span><br><span class="line">    u'test'</span><br><span class="line">    &gt;&gt;&gt; getUnicode('test')</span><br><span class="line">    u'test'</span><br><span class="line">    &gt;&gt;&gt; getUnicode(1)</span><br><span class="line">    u'1'</span><br><span class="line">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> noneToNull <span class="keyword">and</span> value <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">return</span> NULL</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> isListLike(value):</span><br><span class="line">        value = list(getUnicode(_, encoding, noneToNull) <span class="keyword">for</span> _ <span class="keyword">in</span> value)</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> isinstance(value, unicode):</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">    <span class="keyword">elif</span> isinstance(value, basestring):</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">return</span> unicode(value, encoding <span class="keyword">or</span> (kb.get(<span class="string">"pageEncoding"</span>) <span class="keyword">if</span> kb.get(<span class="string">"originalPage"</span>) <span class="keyword">else</span> <span class="keyword">None</span>) <span class="keyword">or</span> UNICODE_ENCODING)</span><br><span class="line">            <span class="keyword">except</span> UnicodeDecodeError, ex:</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">return</span> unicode(value, UNICODE_ENCODING)</span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    value = value[:ex.start] + <span class="string">""</span>.join(INVALID_UNICODE_CHAR_FORMAT % ord(_) <span class="keyword">for</span> _ <span class="keyword">in</span> value[ex.start:ex.end]) + value[ex.end:]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> unicode(value)</span><br><span class="line">        <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">            <span class="keyword">return</span> unicode(str(value), errors=<span class="string">"ignore"</span>)  <span class="comment"># encoding ignored for non-basestring instances</span></span><br></pre></td></tr></table></figure></p>
+<p>得到一个unicode的值</p>
+<p><em>sys.getfilesystemencoding()</em><br>获取文件使用的编码方式</p>
+<p>所以这个modulePath 主要用于获得路径。</p>
+<h3 id="main()">main()</h3><p>87行<em>setPaths()</em>见lib/core/common.py 1133-1179行<br>设置了sqlmap的绝对路径</p>
+<p>88行<em>banner()</em>见lib/core/common.py 1079-1092行<br>打印了sqlmap的版本信息</p>
+<p>91-92行<br>存储以备日后恢复原来的命令行选项<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmdLineOptions.<span class="function"><span class="title">update</span><span class="params">(cmdLineParser()</span></span>.__dict__)</span><br><span class="line"><span class="function"><span class="title">initOptions</span><span class="params">(cmdLineOptions)</span></span></span><br></pre></td></tr></table></figure></p>
+<p><em>initOptions(cmdLineOptions)</em><br>见lib/core/option.py 2533-2536行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initOptions</span><span class="params">(inputOptions=AttribDict<span class="params">()</span>, overrideOptions=False)</span>:</span></span><br><span class="line">    _setConfAttributes()</span><br><span class="line">    _setKnowledgeBaseAttributes()</span><br><span class="line">    _mergeOptions(inputOptions, overrideOptions)</span><br></pre></td></tr></table></figure></p>
+<p><em>_setConfAttributes()</em><br>见lib/core/option.py 1739-1773行<br>设置了一些必要的属性<br><em>_setKnowledgeBaseAttributes()</em><br>见lib/core/option.py 1775-1938行<br>保存了一些注入时的参数，<br><em>_mergeOptions()</em><br>见lib/core/option.py 2131-2184行<br>利用配置文件和默认选项整理合并命令行</p>
+<p>115行<em>start()</em><br>见lib/controller.py 247-677行<br>开始检测，这个函数之后我会再写一篇介绍。</p>
+
+      
+
+
+
+
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sqlmap，python/"> #sqlmap，python </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/03/pycurl安装/">pycurl安装</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/05/11/sqlmap源码分析(一)sqlmap.py/"
+               data-title="sqlmap源码分析(一)sqlmap.py" data-url="http://edward-l.github.io/2016/05/11/sqlmap源码分析(一)sqlmap.py/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://edwardl.qiniudn.com/psb.jpeg" alt="Edward_L" />
+          <p class="site-author-name">Edward_L</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml">
+              <i class="menu-item-icon icon-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/Edward-L" target="_blank">GitHub</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/Edward7L" target="_blank">Weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.zhihu.com/people/lin-zhe-xi" target="_blank">ZhiHu</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+
+    <!--增加swiftype搜索功能-->
+    <form class="menu-item menu-item-search">
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+    </form>
+    
+    <script type="text/javascript">
+      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+      _st('install','HxJvJ6xstU7NZbDoyPPn','2.0.0');
+    </script>
+    <!--增加swiftype搜索功能end-->           	   
+    
+	</div>      
+
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlmap-py源码"><span class="nav-number">1.</span> <span class="nav-text">sqlmap.py源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#modulePath()"><span class="nav-number">1.1.</span> <span class="nav-text">modulePath()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#main()"><span class="nav-number">1.2.</span> <span class="nav-text">main()</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<div class="copyright">
+  
+  &copy; &nbsp;  2014 - 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Edward_L</span>
+
+<span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+
+<span id="busuanzi_container_site_pv">
+   Total <span id="busuanzi_value_site_pv"></span> views
+</span>
+
+<span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  
+<span id="busuanzi_container_site_uv">
+    Unique Visitors:<span id="busuanzi_value_site_uv"></span>   
+</span>
+
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+
+  function displaySidebar () {
+    setTimeout(function () {
+      $('.sidebar-toggle').trigger('click');
+    }, 800);
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebarToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebarToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      if (isDesktop() && HEXO_SIDEBAR_CONFIGURATION === 'post') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    var HEXO_SIDEBAR_CONFIGURATION = 'hide';
+    $(document).ready(function () {
+      if (HEXO_SIDEBAR_CONFIGURATION === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"edward7l"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+  <script type="text/javascript">
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-56285224-2');ga('send','pageview');
+  </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+
+</body>
+</html>
