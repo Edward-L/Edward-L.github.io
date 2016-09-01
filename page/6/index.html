@@ -121,6 +121,219 @@
           
           
             
+              <a class="post-title-link" href="/2014/11/12/多进程之thread/">
+                多进程之thread
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2014-11-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/python/">python</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2014/11/12/多进程之thread/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/12/多进程之thread/"></span>
+            </a>
+          </span>
+          
+        
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/11/12/多进程之thread/"class="leancloud_visitors" data-flag-title="多进程之thread">
+         &nbsp;Views
+        </span>
+
+
+
+      </div>
+    </div>
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><code>python</code>是支持多线程的，主要是通过<code>thread</code>和<code>threading</code>这两个模块来实现的。</p>
+<p><code>python</code>的<code>thread</code>模块是比较底层的模块，<code>python</code>的<code>threading</code>模块是对<code>thread</code>做了一些包装的，可以更加方便的被使用。</p>
+<p>我们先来看下</p>
+<h3 id="thread">thread</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread.start_new_thread ( <span class="function"><span class="keyword">function</span>, <span class="title">args</span><span class="params">[, kwargs]</span> )</span></span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/11/12/多进程之thread/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+
+
+
+
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/"> #python </a>
+          
+            <a href="/tags/thread/"> #thread </a>
+          
+            <a href="/tags/多线程/"> #多线程 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2014/11/12/socket 第二蛋 server1.0～/">
+                socket 第二蛋 server1.0～
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2014-11-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/python/">python</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2014/11/12/socket 第二蛋 server1.0～/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/12/socket 第二蛋 server1.0～/"></span>
+            </a>
+          </span>
+          
+        
+
+        
+&nbsp; | &nbsp;
+<span id="/2014/11/12/socket 第二蛋 server1.0～/"class="leancloud_visitors" data-flag-title="socket 第二蛋 server1.0～">
+         &nbsp;Views
+        </span>
+
+
+
+      </div>
+    </div>
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">import socket </span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">'127.0.0.1'</span> </span><br><span class="line">PORT = <span class="number">8885</span></span><br><span class="line"></span><br><span class="line">s = socket.<span class="function"><span class="title">socket</span><span class="params">(socket.AF_INET, socket.SOCK_STREAM)</span></span></span><br><span class="line">print <span class="string">'socket creat!'</span></span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">	s.<span class="function"><span class="title">bind</span><span class="params">((HOST,PORT)</span></span>)</span><br><span class="line">except socket<span class="class">.error</span> , msg:</span><br><span class="line">	print <span class="string">'bind faild.Error Code : '</span> + <span class="function"><span class="title">str</span><span class="params">(msg[<span class="number">0</span>])</span></span> + <span class="string">' Message '</span> + msg[<span class="number">1</span>] </span><br><span class="line">	sys.<span class="function"><span class="title">exit</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line">print <span class="string">'socket bind complete!'</span></span><br><span class="line"></span><br><span class="line">s.<span class="function"><span class="title">listen</span><span class="params">(<span class="number">10</span>)</span></span></span><br><span class="line">print <span class="string">'socket now listening!'</span></span><br><span class="line"></span><br><span class="line">conn, addr = s.<span class="function"><span class="title">accept</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line">while <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">	print <span class="string">'connect with '</span> + addr[<span class="number">0</span>] + <span class="string">' ; '</span> + str (addr[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">	data = conn.<span class="function"><span class="title">recv</span><span class="params">(<span class="number">1024</span>)</span></span></span><br><span class="line">	<span class="keyword">if</span> not data: </span><br><span class="line">		break</span><br><span class="line">	conn.<span class="function"><span class="title">sendall</span><span class="params">(data)</span></span></span><br><span class="line"></span><br><span class="line">conn.<span class="function"><span class="title">close</span><span class="params">()</span></span></span><br><span class="line">s.<span class="function"><span class="title">close</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/11/12/socket 第二蛋 server1.0～/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+
+
+
+
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/"> #python </a>
+          
+            <a href="/tags/server/"> #server </a>
+          
+            <a href="/tags/socket/"> #socket </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2014/11/11/socket 第一蛋 client～/">
                 socket 第一蛋 client～
               </a>
@@ -625,219 +838,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2014/11/05/curl的一些常用方法/">
-                curl的一些常用方法
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2014-11-05
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/tools/">tools</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2014/11/05/curl的一些常用方法/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/05/curl的一些常用方法/"></span>
-            </a>
-          </span>
-          
-        
-
-        
-&nbsp; | &nbsp;
-<span id="/2014/11/05/curl的一些常用方法/"class="leancloud_visitors" data-flag-title="curl的一些常用方法">
-         &nbsp;Views
-        </span>
-
-
-
-      </div>
-    </div>
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>最近发现<code>curl</code>是一个很有用的工具，但是只是用到了里面的post数据提交，并没有用到其他的功能，所以最近有时间就整理了下其他的一些用法。</p>
-<h1 id="0X00"><strong>0X00</strong></h1><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//Edward-L.github.io</span></span><br></pre></td></tr></table></figure>
-<p>首先是最简单的获取整个页面,当然如果，<code>url</code>指向的是一个文件之类的东东，他就会下载这个东东到本地。</p>
-<p>如果是<code>html</code>文档，默认是不会现实<code>html</code>的<code>header</code>的，可以使用<code>-i</code>来显示所有的信息，使用<code>－l</code>来显示<code>header</code>。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/11/05/curl的一些常用方法/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-
-
-
-
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/curl/"> #curl </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2014/10/02/python版手机app控制mac电脑锁屏/">
-                python版手机app控制mac电脑锁屏
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2014-10-02
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/python/">python</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2014/10/02/python版手机app控制mac电脑锁屏/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/02/python版手机app控制mac电脑锁屏/"></span>
-            </a>
-          </span>
-          
-        
-
-        
-&nbsp; | &nbsp;
-<span id="/2014/10/02/python版手机app控制mac电脑锁屏/"class="leancloud_visitors" data-flag-title="python版手机app控制mac电脑锁屏">
-         &nbsp;Views
-        </span>
-
-
-
-      </div>
-    </div>
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>每天和一群灰阔生活在一起是一件非常有趣和危险的一件事。一不小心出去忘记锁屏，那么谁知道你的电脑会发生什么事呢。一天，小雨就忘记了锁屏就直接回寝室了，走在路上才想起来，内心是十分的不安阿！所以我们就在想能不能做一个app远程控制电脑锁屏呢！</p>
-<p>第二天lightless就写了一个windows版的锁屏<a href="http://drops.hduisa.cn/archives/lock-screen-via-your-phone.html">传送门</a>，我很想用阿，怎么办呢！果断自己动手阿！我向lightless要了一个app的接口（因为我不会java！），然后我就开始用python写pc端的脚本了！<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import urllib2</span><br><span class="line">import re</span><br><span class="line">import <span class="tag">time</span></span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">while True:</span><br><span class="line">    response = urllib2.<span class="function"><span class="title">urlopen</span><span class="params">(<span class="string">"http://lightless.cn/RemoteControl/GetCode.php?sec-code=Edward_L"</span>)</span></span></span><br><span class="line">    <span class="tag">html</span> = response.<span class="function"><span class="title">read</span><span class="params">()</span></span></span><br><span class="line">    <span class="id">#print</span> <span class="tag">html</span></span><br><span class="line">    res = re.<span class="function"><span class="title">findall</span><span class="params">(<span class="string">"\d"</span>,html)</span></span></span><br><span class="line">    <span class="id">#print</span> res</span><br><span class="line">    <span class="tag">time</span>.<span class="function"><span class="title">sleep</span><span class="params">(<span class="number">5</span>)</span></span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">if</span> res[<span class="number">0</span>] == <span class="string">"0"</span>:</span><br><span class="line">        os.<span class="function"><span class="title">system</span><span class="params">(<span class="string">"pmset sleepnow"</span>)</span></span></span><br><span class="line">        break</span><br></pre></td></tr></table></figure></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/10/02/python版手机app控制mac电脑锁屏/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-
-
-
-
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/app控制电脑锁屏/"> #app控制电脑锁屏 </a>
-          
-            <a href="/tags/python/"> #python </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/">&laquo;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">&raquo;</a>
   </div>
 
 
@@ -871,21 +876,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">51</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

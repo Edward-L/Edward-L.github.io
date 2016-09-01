@@ -121,6 +121,210 @@
           
           
             
+              <a class="post-title-link" href="/2016/09/01/格式化字符串漏洞/">
+                格式化字符串漏洞
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-09-01
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/binary/">binary</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/09/01/格式化字符串漏洞/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/01/格式化字符串漏洞/"></span>
+            </a>
+          </span>
+          
+        
+
+        
+&nbsp; | &nbsp;
+<span id="/2016/09/01/格式化字符串漏洞/"class="leancloud_visitors" data-flag-title="格式化字符串漏洞">
+         &nbsp;Views
+        </span>
+
+
+
+      </div>
+    </div>
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h2 id="任意地址写">任意地址写</h2><p>学习了<a href="http://libc.pw/2015/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/">z神的博客</a>之后对最后一个例子不是很理解，就进行了实践分析。<br>源程序<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123; </span><br><span class="line"><span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;flag; </span><br><span class="line"><span class="keyword">char</span> a[<span class="number">100</span>];</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">"%s"</span>,a);</span><br><span class="line"><span class="built_in">printf</span>(a);</span><br><span class="line"><span class="keyword">if</span>(flag == <span class="number">2000</span>)</span><br><span class="line">    &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"good!!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/09/01/格式化字符串漏洞/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+
+
+
+
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/格式化字符串漏洞，icectf，dear-diary/"> #格式化字符串漏洞，icectf，dear_diary </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2016/08/18/c是怎么使用内存的/">
+                c是怎么使用内存的
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-08-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/c/">c</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/08/18/c是怎么使用内存的/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/18/c是怎么使用内存的/"></span>
+            </a>
+          </span>
+          
+        
+
+        
+&nbsp; | &nbsp;
+<span id="/2016/08/18/c是怎么使用内存的/"class="leancloud_visitors" data-flag-title="c是怎么使用内存的">
+         &nbsp;Views
+        </span>
+
+
+
+      </div>
+    </div>
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>指针类型（point type）可由函数类型，对象类型或不完全的类型派生，派生指针类型的类型称为引用类型。指针类型描述一个对象，该类对象的值提供对该引用类型实体的引用。有引用类型T派生的指针类型有时称为“（指向）T的指针”。从引用类型构造指针类型的过程称为“指针类型的派生”。这些构造派生类型的方法可以递归的应用。</p>
+</blockquote>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/18/c是怎么使用内存的/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+
+
+
+
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c，cache，pointer/"> #c，cache，pointer </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2016/05/11/sqlmap源码分析(一)sqlmap.py/">
                 sqlmap源码分析(一)sqlmap.py
               </a>
@@ -616,215 +820,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/05/08/360hackgame/">
-                360hackgame
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2015-05-08
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/writeup/">writeup</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/05/08/360hackgame/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/08/360hackgame/"></span>
-            </a>
-          </span>
-          
-        
-
-        
-&nbsp; | &nbsp;
-<span id="/2015/05/08/360hackgame/"class="leancloud_visitors" data-flag-title="360hackgame">
-         &nbsp;Views
-        </span>
-
-
-
-      </div>
-    </div>
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="第一关">第一关</h3><p>提示要从<code>hack.360.cn</code>进去，改一下refere就可以了。</p>
-<h3 id="第二关">第二关</h3><p>让我们找密码？那就找了～结果找到了这样一段js代码～<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/05/08/360hackgame/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-
-
-
-
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/360hackgame/"> #360hackgame </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/04/30/pip安装库时遇到的问题/">
-                pip安装库时遇到的问题
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2015-04-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/python/">python</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/30/pip安装库时遇到的问题/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/30/pip安装库时遇到的问题/"></span>
-            </a>
-          </span>
-          
-        
-
-        
-&nbsp; | &nbsp;
-<span id="/2015/04/30/pip安装库时遇到的问题/"class="leancloud_visitors" data-flag-title="pip安装库时遇到的问题">
-         &nbsp;Views
-        </span>
-
-
-
-      </div>
-    </div>
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>昨天晚上想要新装一个库，但是发现直接<code>sudo pip install</code>安装提示成功，但是直接在import的时候提示没有这个库，奇怪，又试着重新安装提示已经安装过了，然后看了下他的路径发现了一些问题。<br><figure class="highlight monkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"><span class="keyword">import</span> sys</span></span><br><span class="line">sys.path</span><br></pre></td></tr></table></figure></p>
-<p>发现直接在终端里用python的时候它居然跑到了MAMP里的python，然后我直接用<code>pip</code>或者<code>easy_install</code>安装的库在<code>/Library/Python/2.7/site-packages/</code>所以自然就不能就调用了,看了下,MAMP中的python是一个软链接，直接改掉了MAMP中python的名字，这样他就直接调用了Library中的了，问题解决。看来还是MAMP的问题。</p>
-
-        
-      
-
-
-
-
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/MAMP/"> #MAMP </a>
-          
-            <a href="/tags/pip/"> #pip </a>
-          
-            <a href="/tags/python/"> #python </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </div>
 
 
@@ -858,21 +858,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">51</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

